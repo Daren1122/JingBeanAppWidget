@@ -37,12 +37,20 @@ class SettingActivity : BaseActivity() {
 
         startUpdateService.isChecked = "1" != CacheUtil.getString("startUpdateService")
 
+        hideDivider.isChecked = "1" == CacheUtil.getString("hideDivider")
+
         val paddingType = CacheUtil.getString("paddingType")
         paddingTip.text = if (TextUtils.isEmpty(paddingType)) {
             "15dp"
         } else {
             paddingType
         }
+
+        var designColorTxt = CacheUtil.getString("designColor")
+        if (TextUtils.isEmpty(designColorTxt)) {
+            designColorTxt = "#FFFFFF"
+        }
+        designColor.text = designColorTxt
     }
 
     override fun setEvent() {
