@@ -60,7 +60,7 @@
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/dp_15"
             android:paddingRight="@dimen/dp_15"
-            android:text="每次进入App刷新数据"
+            android:text="进入App刷新数据"
             android:textColor="@color/black"
             android:textSize="@dimen/dp_15" />
 
@@ -73,6 +73,19 @@
             android:paddingLeft="@dimen/dp_15"
             android:paddingRight="@dimen/dp_15"
             android:text="颜色反转"
+            android:textColor="@color/black"
+            android:textSize="@dimen/dp_15"
+            android:visibility="visible" />
+
+        <Switch
+            android:id="@+id/hideDivider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_45"
+            android:background="@drawable/selector_setting_item_bg"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_15"
+            android:paddingRight="@dimen/dp_15"
+            android:text="隐藏分割线"
             android:textColor="@color/black"
             android:textSize="@dimen/dp_15"
             android:visibility="visible" />
@@ -97,7 +110,7 @@
                 android:layout_height="@dimen/dp_40"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="小组件左右边距设置"
+                android:text="小组件左右边距"
                 android:textColor="@color/black"
                 android:textSize="@dimen/dp_15" />
 
