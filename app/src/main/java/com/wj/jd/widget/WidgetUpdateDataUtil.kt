@@ -318,12 +318,12 @@ class WidgetUpdateDataUtil {
             remoteViews.setTextColor(R.id.todayTip, Color.parseColor("#888888"))
             remoteViews.setTextColor(R.id.oneAgoBeanNum, Color.parseColor("#FF000000"))
             remoteViews.setTextColor(R.id.todayBeanNum, Color.parseColor("#FF000000"))
-            remoteViews.setTextColor(R.id.title, ColorUtil.transColor("#FF000000"))
-            remoteViews.setTextColor(R.id.guoquHb, ColorUtil.transColor("#888888"))
-            remoteViews.setTextColor(R.id.hongbao, ColorUtil.transColor("#FF0000"))
-            remoteViews.setTextColor(R.id.hongbao, ColorUtil.transColor("#FF0000"))
-            remoteViews.setTextColor(R.id.tips, ColorUtil.transColor("#888888"))
-            remoteViews.setTextColor(R.id.updateTime, ColorUtil.transColor("#888888"))
+            remoteViews.setTextColor(R.id.title, Color.parseColor("#FF000000"))
+            remoteViews.setTextColor(R.id.guoquHb, Color.parseColor("#888888"))
+            remoteViews.setTextColor(R.id.hongbao, Color.parseColor("#FF0000"))
+            remoteViews.setTextColor(R.id.hongbao, Color.parseColor("#FF0000"))
+            remoteViews.setTextColor(R.id.tips, Color.parseColor("#888888"))
+            remoteViews.setTextColor(R.id.updateTime, Color.parseColor("#888888"))
         }
 
         val hideDivider = CacheUtil.getString("hideDivider")
