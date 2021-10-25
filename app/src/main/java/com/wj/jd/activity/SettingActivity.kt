@@ -13,7 +13,6 @@ import kotlinx.android.synthetic.main.activity_setting.*
 
 class SettingActivity : BaseActivity() {
     var paddingDataList = ArrayList<String>()
-    var alphaDataList = ArrayList<Int>()
 
     override fun setLayoutId(): Int {
         return R.layout.activity_setting
@@ -33,6 +32,8 @@ class SettingActivity : BaseActivity() {
         hideTips.isChecked = "1" == CacheUtil.getString("hideTips")
 
         hideNichen.isChecked = "1" == CacheUtil.getString("hideTips")
+
+        colorSwitch.isChecked = "1" == CacheUtil.getString("colorSwitch")
 
         startUpdateService.isChecked = "1" != CacheUtil.getString("startUpdateService")
 

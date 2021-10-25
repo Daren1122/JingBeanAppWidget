@@ -293,10 +293,11 @@ class WidgetUpdateDataUtil {
         var bac = BitmapUtil.getColorBitmap(designColor)
         remoteViews.setImageViewBitmap(R.id.background, BitmapUtil.bimapRound(bac, 20f))
 
-        if (false) {
-            remoteViews.setTextColor(R.id.nickName, Color.parseColor("#FF000000"))
-        } else {
+        var colorSwitch = CacheUtil.getString("colorSwitch")
+        if ("1" == colorSwitch) {
             remoteViews.setTextColor(R.id.nickName, ColorUtil.transColor("#FF000000"))
+        } else {
+            remoteViews.setTextColor(R.id.nickName, Color.parseColor("#FF000000"))
         }
 
         val cleatInt2 = Intent(MyApplication.mInstance, MainActivity::class.java)
