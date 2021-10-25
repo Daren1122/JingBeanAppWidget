@@ -290,10 +290,10 @@ class WidgetUpdateDataUtil {
         if (TextUtils.isEmpty(designColor)) {
             designColor = "#FFFFFF"
         }
-        var bac = BitmapUtil.getColorBitmap(designColor)
+        val bac = BitmapUtil.getColorBitmap(designColor)
         remoteViews.setImageViewBitmap(R.id.background, BitmapUtil.bimapRound(bac, 20f))
 
-        var colorSwitch = CacheUtil.getString("colorSwitch")
+        val colorSwitch = CacheUtil.getString("colorSwitch")
         if ("1" == colorSwitch) {
             remoteViews.setTextColor(R.id.nickName, ColorUtil.transColor("#FF000000"))
             remoteViews.setTextColor(R.id.jingXiang, ColorUtil.transColor("#FF000000"))
@@ -324,6 +324,13 @@ class WidgetUpdateDataUtil {
             remoteViews.setTextColor(R.id.hongbao, ColorUtil.transColor("#FF0000"))
             remoteViews.setTextColor(R.id.tips, ColorUtil.transColor("#888888"))
             remoteViews.setTextColor(R.id.updateTime, ColorUtil.transColor("#888888"))
+        }
+
+        val hideDivider = CacheUtil.getString("hideDivider")
+        if ("1" == hideDivider) {
+            remoteViews.setViewVisibility(R.id.divider, View.GONE)
+        } else {
+            remoteViews.setViewVisibility(R.id.divider, View.VISIBLE)
         }
 
         val cleatInt2 = Intent(MyApplication.mInstance, MainActivity::class.java)

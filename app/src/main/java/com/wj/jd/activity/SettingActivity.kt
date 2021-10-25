@@ -78,6 +78,14 @@ class SettingActivity : BaseActivity() {
             }
         }
 
+        hideDivider.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                CacheUtil.putString("hideDivider", "1")
+            } else {
+                CacheUtil.putString("hideDivider", "0")
+            }
+        }
+
         settingFinish.setOnClickListener {
             UpdateTask.updateAll()
             Toast.makeText(this, "小组件状态更新完毕", Toast.LENGTH_SHORT).show()
