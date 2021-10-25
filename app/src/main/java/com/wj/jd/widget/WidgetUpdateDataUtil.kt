@@ -296,8 +296,14 @@ class WidgetUpdateDataUtil {
         var colorSwitch = CacheUtil.getString("colorSwitch")
         if ("1" == colorSwitch) {
             remoteViews.setTextColor(R.id.nickName, ColorUtil.transColor("#FF000000"))
+            remoteViews.setTextColor(R.id.jingXiang, ColorUtil.transColor("#FF000000"))
+            remoteViews.setTextColor(R.id.beanNum, ColorUtil.transColor("#FF0000"))
+            remoteViews.setTextColor(R.id.todayBean, ColorUtil.transColor("#008000"))
         } else {
             remoteViews.setTextColor(R.id.nickName, Color.parseColor("#FF000000"))
+            remoteViews.setTextColor(R.id.jingXiang, Color.parseColor("#FF000000"))
+            remoteViews.setTextColor(R.id.beanNum, Color.parseColor("#FF0000"))
+            remoteViews.setTextColor(R.id.todayBean, Color.parseColor("#008000"))
         }
 
         val cleatInt2 = Intent(MyApplication.mInstance, MainActivity::class.java)
