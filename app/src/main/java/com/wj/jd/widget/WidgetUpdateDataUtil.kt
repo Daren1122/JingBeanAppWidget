@@ -27,6 +27,7 @@ import org.json.JSONObject
 import java.lang.Exception
 
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import com.wj.jd.R
 
 
@@ -286,11 +287,17 @@ class WidgetUpdateDataUtil {
         }
 
         var designColor = CacheUtil.getString("designColor")
-        if(TextUtils.isEmpty(designColor)){
+        if (TextUtils.isEmpty(designColor)) {
             designColor = "#FFFFFF"
         }
         var bac = BitmapUtil.getColorBitmap(designColor)
-        remoteViews.setImageViewBitmap(R.id.background, BitmapUtil.bimapRound(bac,20f))
+        remoteViews.setImageViewBitmap(R.id.background, BitmapUtil.bimapRound(bac, 20f))
+
+        if (false) {
+            remoteViews.setTextColor(R.id.nickName, Color.parseColor("#FF000000"))
+        } else {
+            remoteViews.setTextColor(R.id.nickName, ColorUtil.transColor("#FF000000"))
+        }
 
         val cleatInt2 = Intent(MyApplication.mInstance, MainActivity::class.java)
         cleatInt2.flags = Intent.FLAG_ACTIVITY_NEW_TASK

@@ -69,6 +69,14 @@ class SettingActivity : BaseActivity() {
             }
         }
 
+        colorSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                CacheUtil.putString("colorSwitch", "1")
+            } else {
+                CacheUtil.putString("colorSwitch", "0")
+            }
+        }
+
         settingFinish.setOnClickListener {
             UpdateTask.updateAll()
             Toast.makeText(this, "小组件状态更新完毕", Toast.LENGTH_SHORT).show()

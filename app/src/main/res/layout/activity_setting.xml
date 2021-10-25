@@ -65,17 +65,17 @@
             android:textSize="@dimen/dp_15" />
 
         <Switch
-            android:visibility="gone"
-            android:id="@+id/darkStyle"
+            android:id="@+id/colorSwitch"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_45"
             android:background="@drawable/selector_setting_item_bg"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/dp_15"
             android:paddingRight="@dimen/dp_15"
-            android:text="暗黑模式"
+            android:text="颜色反转"
             android:textColor="@color/black"
-            android:textSize="@dimen/dp_15" />
+            android:textSize="@dimen/dp_15"
+            android:visibility="visible" />
 
         <View
             android:layout_width="match_parent"
