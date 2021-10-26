@@ -36,6 +36,8 @@ class MainActivity : BaseActivity() {
     override fun initView() {
         setTitle("京豆")
         back?.visibility = View.GONE
+
+        setRightTitle("关于")
     }
 
     override fun initData() {
@@ -205,7 +207,7 @@ class MainActivity : BaseActivity() {
         addTGGroup.setOnClickListener {
             val intent = Intent()
             intent.action = "android.intent.action.VIEW"
-            intent.data = Uri.parse("https://t.me/joinchat/VJICOAj1z2BmOGVl/")
+            intent.data = Uri.parse("https://t.me/joinchat/VJICOAj1z2BmOGVl")
             startActivity(intent)
         }
     }

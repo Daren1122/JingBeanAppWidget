@@ -15,6 +15,7 @@ import com.wj.jd.dialog.NewStyleDialog
 abstract class BaseActivity : AppCompatActivity() {
     private var barView: View? = null
     private var titleTv: TextView? = null
+    private var rightTitleTv: TextView? = null
     public var back: LinearLayout? = null
     private lateinit var currentActivity: FragmentActivity
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,6 +23,7 @@ abstract class BaseActivity : AppCompatActivity() {
         setContentView(setLayoutId())
         barView = findViewById(R.id.barView)
         titleTv = findViewById(R.id.title)
+        rightTitleTv = findViewById(R.id.rightTitle)
         back = findViewById(R.id.back)
         currentActivity = this
         immersionBar {
@@ -48,6 +50,11 @@ abstract class BaseActivity : AppCompatActivity() {
 
     fun setTitle(str: String) {
         titleTv?.text = str
+    }
+
+    fun setRightTitle(str: String) {
+        rightTitleTv?.visibility = View.VISIBLE
+        rightTitleTv?.text = str
     }
 
 
