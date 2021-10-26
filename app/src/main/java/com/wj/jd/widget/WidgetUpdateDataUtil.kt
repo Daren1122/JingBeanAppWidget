@@ -30,7 +30,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import com.wj.jd.R
 
-
 /**
  * author wangjing
  * Date 2021/10/13
