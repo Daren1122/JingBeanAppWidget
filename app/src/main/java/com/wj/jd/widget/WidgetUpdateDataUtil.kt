@@ -190,7 +190,7 @@ class WidgetUpdateDataUtil {
                     } else {
                         Log.i("====", TimeUtil.getYesterDay(-1))
                         var oneAgoJBeanNum = CacheUtil.getString(TimeUtil.getYesterDay(-1) + thisKey)
-                        if (TextUtils.isEmpty(oneAgoJBeanNum)) {
+                        if (TextUtils.isEmpty(oneAgoJBeanNum) || 0 == oneAgoJBeanNum?.toInt()) {
                             Log.i("====", "昨天缓存数据为空 请求后台")
                             get1AgoBeanData()
                         } else {
