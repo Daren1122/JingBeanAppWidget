@@ -11,22 +11,22 @@ import com.wj.jd.widget.WidgetUpdateDataUtil
  * Description
  */
 object UpdateTask {
+    var widgetUpdateDataUtil = WidgetUpdateDataUtil()
     var widgetUpdateDataUtil1 = WidgetUpdateDataUtil()
     var widgetUpdateDataUtil2 = WidgetUpdateDataUtil()
-    var widgetUpdateDataUtil3 = WidgetUpdateDataUtil()
 
     var handler = Handler(Looper.getMainLooper())
 
     fun updateAll() {
         handler.post {
-            widgetUpdateDataUtil1.updateWidget("ck")
+            widgetUpdateDataUtil.updateWidget("ck")
         }
         handler.postDelayed({
-            widgetUpdateDataUtil2.updateWidget("ck1")
-        }, 3000)
+            widgetUpdateDataUtil1.updateWidget("ck1")
+        }, 2500)
 
         handler.postDelayed({
-            widgetUpdateDataUtil3.updateWidget("ck2")
-        }, 6000)
+            widgetUpdateDataUtil2.updateWidget("ck2")
+        }, 5000)
     }
 }

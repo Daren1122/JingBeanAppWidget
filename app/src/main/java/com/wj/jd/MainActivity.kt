@@ -198,7 +198,7 @@ class MainActivity : BaseActivity() {
                 CacheUtil.putString("ck", inputCK.text.toString())
                 Toast.makeText(this, "CK添加成功", Toast.LENGTH_SHORT).show()
                 inputCK.setText("")
-                UpdateTask.widgetUpdateDataUtil1.updateWidget("ck")
+                UpdateTask.widgetUpdateDataUtil.updateWidget("ck")
             }
         }
 
@@ -243,21 +243,21 @@ class MainActivity : BaseActivity() {
     inner class NotificationUpdateReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             Log.i("====", "NotificationUpdateReceiver")
-            UpdateTask.widgetUpdateDataUtil1.updateWidget("ck")
+            UpdateTask.widgetUpdateDataUtil.updateWidget("ck")
         }
     }
 
     inner class NotificationUpdateReceiver1 : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             Log.i("====", "NotificationUpdateReceiver1")
-            UpdateTask.widgetUpdateDataUtil2.updateWidget("ck1")
+            UpdateTask.widgetUpdateDataUtil1.updateWidget("ck1")
         }
     }
 
     inner class NotificationUpdateReceiver2 : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             Log.i("====", "NotificationUpdateReceiver1")
-            UpdateTask.widgetUpdateDataUtil3.updateWidget("ck2")
+            UpdateTask.widgetUpdateDataUtil2.updateWidget("ck2")
         }
     }
 }

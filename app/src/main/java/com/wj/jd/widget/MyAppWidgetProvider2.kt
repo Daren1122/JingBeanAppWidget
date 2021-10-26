@@ -33,7 +33,7 @@ class MyAppWidgetProvider2 : AppWidgetProvider() {
         super.onReceive(context, intent)
         //这里判断是自己的action，做自己的事情
         if (intent.action == ACTION_APPWIDGET_UPDATE) {
-            UpdateTask.widgetUpdateDataUtil1.updateWidget("ck2")
+            UpdateTask.widgetUpdateDataUtil.updateWidget("ck2")
         }
     }
 

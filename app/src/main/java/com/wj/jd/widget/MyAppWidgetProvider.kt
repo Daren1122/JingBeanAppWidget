@@ -35,7 +35,7 @@ class MyAppWidgetProvider : AppWidgetProvider() {
         //这里判断是自己的action，做自己的事情
         Log.i("====", "onReceive")
         if (intent.action == ACTION_APPWIDGET_UPDATE) {
-            UpdateTask.widgetUpdateDataUtil1.updateWidget("ck")
+            UpdateTask.widgetUpdateDataUtil.updateWidget("ck")
         }
     }
 
