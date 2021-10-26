@@ -21,9 +21,10 @@
             android:orientation="vertical">
 
             <EditText
+                android:gravity="center"
                 android:id="@+id/inputCK"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_100"
+                android:layout_height="@dimen/dp_80"
                 android:hint="请输入京东CK，只更新帐号1数据，多CK见【多账号】"
                 android:textSize="@dimen/dp_13" />
 
