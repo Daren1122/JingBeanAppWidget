@@ -49,7 +49,7 @@ object TimeUtil {
 
     @Synchronized
     fun isFastClick(): Boolean {
-        if (System.currentTimeMillis() - lastClickTime < 2500) {
+        if (System.currentTimeMillis() - lastClickTime < 1500) {
             lastClickTime = System.currentTimeMillis()
             return true
         }
