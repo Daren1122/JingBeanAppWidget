@@ -14,6 +14,7 @@ import android.widget.Toast
 import com.google.gson.Gson
 import com.liulishuo.filedownloader.BaseDownloadTask
 import com.liulishuo.filedownloader.FileDownloader
+import com.wj.jd.activity.AboutActivity
 import com.wj.jd.activity.MuchCkActivity
 import com.wj.jd.activity.MyWebActivity
 import com.wj.jd.activity.SettingActivity
@@ -22,6 +23,7 @@ import com.wj.jd.bean.VersionBean
 import com.wj.jd.dialog.NewStyleDialog
 import com.wj.jd.util.*
 import com.zhy.base.fileprovider.FileProvider7
+import kotlinx.android.synthetic.main.include_title.*
 import java.io.File
 
 class MainActivity : BaseActivity() {
@@ -37,7 +39,7 @@ class MainActivity : BaseActivity() {
         setTitle("京豆")
         back?.visibility = View.GONE
 
-        setRightTitle("关于")
+        setRightTitle("使用说明")
     }
 
     override fun initData() {
@@ -208,6 +210,11 @@ class MainActivity : BaseActivity() {
             val intent = Intent()
             intent.action = "android.intent.action.VIEW"
             intent.data = Uri.parse("https://t.me/joinchat/VJICOAj1z2BmOGVl")
+            startActivity(intent)
+        }
+
+        rightTitle.setOnClickListener {
+            val intent = Intent(this, AboutActivity::class.java)
             startActivity(intent)
         }
     }
