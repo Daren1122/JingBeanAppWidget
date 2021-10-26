@@ -23,6 +23,14 @@
             android:orientation="vertical">
 
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="添加过多帐号可能会有显示问题，慎用！"
+                android:textColor="#ff0000"
+                android:textSize="@dimen/dp_13" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -70,6 +78,87 @@
                     android:layout_marginRight="@dimen/dp_25"
                     android:background="@drawable/background_count_down_bac"
                     android:text="更新CK3状态"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dp_16" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_20"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <EditText
+                    android:id="@+id/inputCK3"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_80"
+                    android:hint="请输入第四个帐号的CK"
+                    android:textSize="@dimen/dp_13" />
+
+                <Button
+                    android:id="@+id/updateCK3"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginLeft="@dimen/dp_25"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginRight="@dimen/dp_25"
+                    android:background="@drawable/background_count_down_bac"
+                    android:text="更新CK4状态"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dp_16" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_20"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/inputCK4"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_80"
+                    android:hint="请输入第五个帐号的CK"
+                    android:textSize="@dimen/dp_13" />
+
+                <Button
+                    android:id="@+id/updateCK4"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginLeft="@dimen/dp_25"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginRight="@dimen/dp_25"
+                    android:background="@drawable/background_count_down_bac"
+                    android:text="更新CK5状态"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dp_16" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_20"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/inputCK5"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_80"
+                    android:hint="请输入第六个帐号的CK"
+                    android:textSize="@dimen/dp_13" />
+
+                <Button
+                    android:id="@+id/updateCK5"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginLeft="@dimen/dp_25"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginRight="@dimen/dp_25"
+                    android:background="@drawable/background_count_down_bac"
+                    android:text="更新CK6状态"
                     android:textColor="@color/white"
                     android:textSize="@dimen/dp_16" />
             </LinearLayout>
