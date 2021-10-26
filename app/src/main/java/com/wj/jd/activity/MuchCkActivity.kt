@@ -40,7 +40,7 @@ class MuchCkActivity : BaseActivity() {
             } else {
                 CacheUtil.putString("ck2", inputCK2.text.toString())
                 Toast.makeText(this, "CK3添加成功", Toast.LENGTH_SHORT).show()
-                UpdateTask.widgetUpdateDataUtil3.updateWidget("ck2")
+                UpdateTask.widgetUpdateDataUtil2.updateWidget("ck2")
             }
         }
     }
