@@ -20,6 +20,7 @@ import com.wj.jd.activity.MyWebActivity
 import com.wj.jd.activity.SettingActivity
 import com.wj.jd.bean.SimpleFileDownloadListener
 import com.wj.jd.bean.VersionBean
+import com.wj.jd.dialog.InputCKDialog
 import com.wj.jd.dialog.InputDialog
 import com.wj.jd.dialog.NewStyleDialog
 import com.wj.jd.util.*
@@ -229,14 +230,14 @@ class MainActivity : BaseActivity() {
     * 有京东CK
     * */
     private fun haveCK() {
-        var inputDialog = InputDialog(this)
-        inputDialog.onOkClickListener = object : InputDialog.OnOkClickListener {
+        var inputCKDialog = InputCKDialog(this)
+        inputCKDialog.onOkClickListener = object : InputCKDialog.OnOkClickListener {
             override fun ok(str: String) {
                 CacheUtil.putString("designColor", str)
                 designColor.text = str
             }
         }
-        inputDialog.pop()
+        inputCKDialog.pop()
     }
 
 
