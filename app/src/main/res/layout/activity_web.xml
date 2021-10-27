@@ -10,6 +10,7 @@
     <include layout="@layout/include_title" />
 
     <com.wj.jd.webView.MarqueeTextView
+        android:id="@+id/tips"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="marquee"
@@ -19,7 +20,8 @@
         android:paddingRight="@dimen/dp_10"
         android:singleLine="true"
         android:text="请输入手机号，然后点击获取验证码，登录成功后在弹出的对话框点击上传则CK提交到青龙挂京豆平台"
-        android:textColor="#FF0000" />
+        android:textColor="#FF0000"
+        android:visibility="gone" />
 
     <com.wj.jd.webView.CommonWebView
         android:id="@+id/mCommonWebView"

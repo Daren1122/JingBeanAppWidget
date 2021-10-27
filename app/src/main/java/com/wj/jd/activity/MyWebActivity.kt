@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.text.TextUtils
+import android.view.View
 import android.webkit.CookieManager
 import android.webkit.CookieSyncManager
 import android.widget.Toast
@@ -30,6 +31,11 @@ class MyWebActivity : BaseActivity() {
             setTitle("网页浏览器")
         } else {
             setTitle(title.toString())
+        }
+        if("1" == type){
+            tips.visibility = View.VISIBLE
+        }else{
+            tips.visibility = View.GONE
         }
     }
 
