@@ -20,9 +20,11 @@ import com.wj.jd.activity.MyWebActivity
 import com.wj.jd.activity.SettingActivity
 import com.wj.jd.bean.SimpleFileDownloadListener
 import com.wj.jd.bean.VersionBean
+import com.wj.jd.dialog.InputDialog
 import com.wj.jd.dialog.NewStyleDialog
 import com.wj.jd.util.*
 import com.zhy.base.fileprovider.FileProvider7
+import kotlinx.android.synthetic.main.activity_setting.*
 import kotlinx.android.synthetic.main.include_title.*
 import java.io.File
 
@@ -167,8 +169,15 @@ class MainActivity : BaseActivity() {
 
     override fun setEvent() {
         uploadCk.setOnClickListener {
-
-
+            createDialog("提示", "是否已有京东CK", "没有京东CK", "已有京东CK", object : NewStyleDialog.OnLeftClickListener {
+                override fun leftClick() {
+                    hasNotCk()
+                }
+            }, object : NewStyleDialog.OnRightClickListener {
+                override fun rightClick() {
+                    haveCK()
+                }
+            })
         }
 
         setting.setOnClickListener {
@@ -183,8 +192,8 @@ class MainActivity : BaseActivity() {
 
         loginJd.setOnClickListener {
             val intent = Intent(this, MyWebActivity::class.java)
-            intent.putExtra("url","https://plogin.m.jd.com/login/login")
-            intent.putExtra("title","京东网页版获取CK")
+            intent.putExtra("url", "https://plogin.m.jd.com/login/login")
+            intent.putExtra("title", "京东网页版获取CK")
             startActivity(intent)
         }
 
@@ -214,6 +223,27 @@ class MainActivity : BaseActivity() {
             val intent = Intent(this, AboutActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    /*
+    * 有京东CK
+    * */
+    private fun haveCK() {
+        var inputDialog = InputDialog(this)
+        inputDialog.onOkClickListener = object : InputDialog.OnOkClickListener {
+            override fun ok(str: String) {
+                CacheUtil.putString("designColor", str)
+                designColor.text = str
+            }
+        }
+        inputDialog.pop()
+    }
+
+
+    /*
+    * 没有有京东CK
+    * */
+    private fun hasNotCk() {
     }
 
     /****************

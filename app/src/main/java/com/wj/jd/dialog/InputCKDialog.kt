@@ -25,7 +25,7 @@ class InputCKDialog(var mActivity: Activity) : Dialog(mActivity!!) {
     }
 
     fun initView(): InputCKDialog {
-        setContentView(R.layout.dialog_layout_style3)
+        setContentView(R.layout.dialog_layout_style4)
         input = findViewById(R.id.inputColor)
 
         var designColor = CacheUtil.getString("designColor")
@@ -41,14 +41,7 @@ class InputCKDialog(var mActivity: Activity) : Dialog(mActivity!!) {
         window?.setBackgroundDrawableResource(android.R.color.transparent)
         window?.setLayout(context.resources.displayMetrics.widthPixels * 5 / 6, LinearLayout.LayoutParams.WRAP_CONTENT)
         ok.setOnClickListener {
-            try {
-                Color.parseColor(input.text.toString())
-                onOkClickListener?.ok(input.text.toString())
-                dismiss()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Toast.makeText(MyApplication.mInstance, "输入无效", Toast.LENGTH_SHORT).show()
-            }
+            onOkClickListener?.ok(input.text.toString())
         }
         return this
     }
