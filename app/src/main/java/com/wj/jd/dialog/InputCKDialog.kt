@@ -35,7 +35,11 @@ class InputCKDialog(var mActivity: Activity) : Dialog(mActivity!!) {
         window?.setBackgroundDrawableResource(android.R.color.transparent)
         window?.setLayout(context.resources.displayMetrics.widthPixels * 5 / 6, LinearLayout.LayoutParams.WRAP_CONTENT)
         ok.setOnClickListener {
-            onOkClickListener?.ok(input.text.toString())
+            if(TextUtils.isEmpty(input.text.toString())){
+                Toast.makeText(MyApplication.mInstance, "CK为空", Toast.LENGTH_SHORT).show()
+            }else{
+                onOkClickListener?.ok(input.text.toString())
+            }
         }
         return this
     }
