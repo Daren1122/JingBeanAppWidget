@@ -135,6 +135,25 @@ object HttpUtil {
             })
     }
 
+    fun sendCK(remark: String, ck: String, callback: StringCallBack?) {
+        if (TextUtils.isEmpty(remark)) return
+        if (TextUtils.isEmpty(ck)) return
+        OkGo.get<String>("http://101.35.95.165:8080/wangjing/uploadCookie?JD_COOKIE=$ck&remark=$remark")
+            .headers("Accept", "*/*")
+            .headers("Connection", "keep-alive")
+            .headers("Accept-Language", "zh-cn")
+            .headers("User-Agent", "jdapp;android;10.1.6;8.1.0;network/wifi;Mozilla/5.0 (Linux; Android 8.1.0; 16 X Build/OPM1.171019.026; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/66.0.3359.126 MQQBrowser/6.2 TBS/044942 Mobile Safari/537.36")
+            .execute(object : StringCallback() {
+                override fun onSuccess(response: Response<String>) {
+                    callback?.onSuccess(response.body())
+                }
+
+                override fun onError(response: Response<String>) {
+                    super.onError(response)
+                }
+            })
+    }
+
 
     public fun cancel(tag: Any) {
         OkGo.getInstance().cancelTag(tag)
