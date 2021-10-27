@@ -79,7 +79,7 @@
                 android:visibility="visible" />
 
             <Button
-                android:id="@+id/noCK"
+                android:id="@+id/uploadCk"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_40"
                 android:layout_marginLeft="@dimen/dp_25"
