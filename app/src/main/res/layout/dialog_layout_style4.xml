@@ -19,6 +19,13 @@
         android:orientation="vertical">
 
         <EditText
+            android:id="@+id/inputRemark"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:hint="请输入备注让我知道是你谁"
+            android:textSize="@dimen/dp_12" />
+
+        <EditText
             android:id="@+id/inputColor"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_80"
