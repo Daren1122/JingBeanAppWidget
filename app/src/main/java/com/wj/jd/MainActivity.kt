@@ -235,8 +235,7 @@ class MainActivity : BaseActivity() {
         var inputCKDialog = InputCKDialog(this)
         inputCKDialog.onOkClickListener = object : InputCKDialog.OnOkClickListener {
             override fun ok(str: String) {
-                CacheUtil.putString("designColor", str)
-                designColor.text = str
+
             }
         }
         inputCKDialog.pop()

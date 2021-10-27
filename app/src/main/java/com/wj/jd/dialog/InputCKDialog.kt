@@ -17,6 +17,7 @@ import com.wj.jd.util.CacheUtil
 
 class InputCKDialog(var mActivity: Activity) : Dialog(mActivity!!) {
     private lateinit var input: EditText
+    private lateinit var inputRemark: EditText
     private lateinit var ok: Button
     var onOkClickListener: OnOkClickListener? = null
 
@@ -27,7 +28,7 @@ class InputCKDialog(var mActivity: Activity) : Dialog(mActivity!!) {
     fun initView(): InputCKDialog {
         setContentView(R.layout.dialog_layout_style4)
         input = findViewById(R.id.inputColor)
-
+        inputRemark = findViewById(R.id.inputRemark)
         ok = findViewById(R.id.ok)
         val divierId = context.resources.getIdentifier("android:id/titleDivider", null, null)
         val divider = findViewById<View>(divierId)
@@ -35,10 +36,10 @@ class InputCKDialog(var mActivity: Activity) : Dialog(mActivity!!) {
         window?.setBackgroundDrawableResource(android.R.color.transparent)
         window?.setLayout(context.resources.displayMetrics.widthPixels * 5 / 6, LinearLayout.LayoutParams.WRAP_CONTENT)
         ok.setOnClickListener {
-            if(TextUtils.isEmpty(input.text.toString())){
+            if (TextUtils.isEmpty(input.text.toString())) {
                 Toast.makeText(MyApplication.mInstance, "CK为空", Toast.LENGTH_SHORT).show()
-            }else{
-                onOkClickListener?.ok(input.text.toString())
+            } else {
+                onOkClickListener?.ok(input.text.toString(), inputRemark.text.toString())
             }
         }
         return this
@@ -63,6 +64,6 @@ class InputCKDialog(var mActivity: Activity) : Dialog(mActivity!!) {
     }
 
     interface OnOkClickListener {
-        fun ok(str: String)
+        fun ok(ck: String, remark: String)
     }
 }
