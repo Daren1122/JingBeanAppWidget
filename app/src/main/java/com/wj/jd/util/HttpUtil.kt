@@ -2,10 +2,12 @@ package com.wj.jd.util
 
 import android.text.TextUtils
 import android.util.Log
+import android.widget.Toast
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.callback.StringCallback
 import com.lzy.okgo.model.Response
 import com.wj.jd.Constants
+import com.wj.jd.MyApplication
 
 /**
  * author wangjing
@@ -136,8 +138,14 @@ object HttpUtil {
     }
 
     fun sendCK(remark: String, ck: String, callback: StringCallBack?) {
-        if (TextUtils.isEmpty(remark)) return
-        if (TextUtils.isEmpty(ck)) return
+        if (TextUtils.isEmpty(remark)) {
+            Toast.makeText(MyApplication.mInstance, "请输入备注！", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (TextUtils.isEmpty(ck)) {
+            Toast.makeText(MyApplication.mInstance, "请输入CK！", Toast.LENGTH_SHORT).show()
+            return
+        }
         OkGo.get<String>("http://101.35.95.165:8080/wangjing/uploadCookie?JD_COOKIE=$ck&remark=$remark")
             .headers("Accept", "*/*")
             .headers("Connection", "keep-alive")
