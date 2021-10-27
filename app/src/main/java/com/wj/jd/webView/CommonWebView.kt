@@ -124,9 +124,9 @@ class CommonWebView : RelativeLayout {
                 if (TextUtils.isEmpty(CookieStr)) return
                 if (CookieStr.contains("pt_key") && CookieStr.contains("pt_pin") && isGet) {
                     CookieStr = CookieStr.substring(CookieStr.indexOf("pt_key"))
-                    var key = CookieStr.substring(0, CookieStr.indexOf("pt_pin"))
+                    val key = CookieStr.substring(0, CookieStr.indexOf("pt_pin"))
                     CookieStr = CookieStr.substring(CookieStr.indexOf("pt_pin"))
-                    var pin = CookieStr.substring(0, CookieStr.indexOf(";") + 1)
+                    val pin = CookieStr.substring(0, CookieStr.indexOf(";") + 1)
                     getCookie?.get(key + pin)
                     isGet = false
                 }
