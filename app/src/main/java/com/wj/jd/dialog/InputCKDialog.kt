@@ -28,12 +28,6 @@ class InputCKDialog(var mActivity: Activity) : Dialog(mActivity!!) {
         setContentView(R.layout.dialog_layout_style4)
         input = findViewById(R.id.inputColor)
 
-        var designColor = CacheUtil.getString("designColor")
-        if(TextUtils.isEmpty(designColor)){
-            designColor = "#FFFFFF"
-        }
-        input.setText(designColor)
-
         ok = findViewById(R.id.ok)
         val divierId = context.resources.getIdentifier("android:id/titleDivider", null, null)
         val divider = findViewById<View>(divierId)

@@ -173,10 +173,12 @@ class MainActivity : BaseActivity() {
             createDialog("提示", "是否已有京东CK", "没有京东CK", "已有京东CK", object : NewStyleDialog.OnLeftClickListener {
                 override fun leftClick() {
                     hasNotCk()
+                    disMissDialog()
                 }
             }, object : NewStyleDialog.OnRightClickListener {
                 override fun rightClick() {
                     haveCK()
+                    disMissDialog()
                 }
             })
         }
