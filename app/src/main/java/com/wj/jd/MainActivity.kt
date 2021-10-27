@@ -167,10 +167,8 @@ class MainActivity : BaseActivity() {
 
     override fun setEvent() {
         uploadCk.setOnClickListener {
-            val intent = Intent(this, MyWebActivity::class.java)
-            intent.putExtra("url","http://a.wangjing520.cn:5701/")
-            intent.putExtra("title","青龙自动挂京豆")
-            startActivity(intent)
+
+
         }
 
         setting.setOnClickListener {
