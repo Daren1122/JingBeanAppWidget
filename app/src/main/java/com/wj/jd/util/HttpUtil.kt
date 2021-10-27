@@ -22,7 +22,6 @@ object HttpUtil {
         }
     }
 
-    @JvmOverloads
     fun getAppVer(callback: StringCallBack?) {
         OkGo.get<String>("http://101.35.95.165/update")
             .tag("all")
@@ -38,7 +37,6 @@ object HttpUtil {
             })
     }
 
-    @JvmOverloads
     fun getUserInfo(key: String, callback: StringCallBack?) {
         Log.i("====key", key)
         var str = getCK(key)
@@ -66,7 +64,6 @@ object HttpUtil {
             })
     }
 
-    @JvmOverloads
     fun getUserInfo1(key: String, callback: StringCallBack?) {
         val str = getCK(key)
         if (TextUtils.isEmpty(str)) return
@@ -89,13 +86,12 @@ object HttpUtil {
             })
     }
 
-    @JvmOverloads
     fun getJD(key: String, page: Int, callback: StringCallBack?) {
         val str = getCK(key)
         if (TextUtils.isEmpty(str)) return
         OkGo.post<String>("https://api.m.jd.com/client.action?functionId=getJingBeanBalanceDetail")
             .tag(key)
-            .params("body", "{\"pageSize\":\"60\",\"page\":\"$page\"}")
+            .params("body", "{\"pageSize\":\"80\",\"page\":\"$page\"}")
             .params("appid", "ld")
             .headers(
                 "User-Agent",
@@ -116,7 +112,6 @@ object HttpUtil {
             })
     }
 
-    @JvmOverloads
     fun getRedPack(key: String, path: String, callback: StringCallBack?) {
         val str = getCK(key)
         if (TextUtils.isEmpty(str)) return
