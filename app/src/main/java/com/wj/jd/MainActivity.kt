@@ -232,20 +232,32 @@ class MainActivity : BaseActivity() {
     * 有京东CK
     * */
     private fun haveCK() {
-        var inputCKDialog = InputCKDialog(this)
+        val inputCKDialog = InputCKDialog(this)
         inputCKDialog.onOkClickListener = object : InputCKDialog.OnOkClickListener {
-            override fun ok(str: String) {
+            override fun ok(ck: String, remark: String) {
+                HttpUtil.sendCK(remark, ck, object : StringCallBack {
+                    override fun onSuccess(result: String) {
+                        Toast.makeText(MyApplication.mInstance, result, Toast.LENGTH_SHORT).show()
+                        inputCKDialog.dismiss()
+                    }
 
+                    override fun onFail() {
+                    }
+                })
             }
         }
         inputCKDialog.pop()
     }
 
-
     /*
     * 没有有京东CK
     * */
     private fun hasNotCk() {
+        val intent = Intent(this, MyWebActivity::class.java)
+        intent.putExtra("url", "https://plogin.m.jd.com/login/login")
+        intent.putExtra("title", "京东网页版获取CK提交青龙")
+        intent.putExtra("type", "1")
+        startActivity(intent)
     }
 
     /****************

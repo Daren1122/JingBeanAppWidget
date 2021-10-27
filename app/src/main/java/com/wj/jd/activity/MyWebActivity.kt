@@ -11,17 +11,21 @@ import com.wj.jd.BaseActivity
 import com.wj.jd.MyApplication
 import com.wj.jd.R
 import com.wj.jd.dialog.NewStyleDialog
+import com.wj.jd.util.HttpUtil
+import com.wj.jd.util.StringCallBack
 import com.wj.jd.webView.CommonWebView
 import kotlinx.android.synthetic.main.activity_web.*
 
 class MyWebActivity : BaseActivity() {
+    private var type: String? = null
 
     override fun setLayoutId(): Int {
         return R.layout.activity_web
     }
 
     override fun initView() {
-        var title = intent.getStringExtra("title")
+        type = intent.getStringExtra("type")
+        val title = intent.getStringExtra("title")
         if (TextUtils.isEmpty(title)) {
             setTitle("网页浏览器")
         } else {
@@ -44,17 +48,43 @@ class MyWebActivity : BaseActivity() {
     }
 
     private fun dealCk(ck: String) {
-        createDialog("已获取到CK", ck, "取消", "复制", object : NewStyleDialog.OnLeftClickListener {
-            override fun leftClick() {
-                disMissDialog()
-            }
-        }, object : NewStyleDialog.OnRightClickListener {
-            override fun rightClick() {
-                copyClipboard(ck)
-                disMissDialog()
+        if("1" == type){
+            createDialog("已获取到CK,是否上传到青龙挂京豆？", ck, "取消", "上传", object : NewStyleDialog.OnLeftClickListener {
+                override fun leftClick() {
+                    disMissDialog()
+                }
+            }, object : NewStyleDialog.OnRightClickListener {
+                override fun rightClick() {
+                    disMissDialog()
+                    sendCK(ck)
+                }
+            })
+        }else{
+            createDialog("已获取到CK", ck, "取消", "复制", object : NewStyleDialog.OnLeftClickListener {
+                override fun leftClick() {
+                    disMissDialog()
+                }
+            }, object : NewStyleDialog.OnRightClickListener {
+                override fun rightClick() {
+                    copyClipboard(ck)
+                    disMissDialog()
+                    finish()
+                }
+            })
+        }
+    }
+
+    private fun sendCK(ck: String) {
+        HttpUtil.sendCK("webView", ck, object : StringCallBack {
+            override fun onSuccess(result: String) {
+                Toast.makeText(MyApplication.mInstance, result, Toast.LENGTH_SHORT).show()
                 finish()
             }
+
+            override fun onFail() {
+            }
         })
+
     }
 
     private fun removeCookie(context: Context) {
