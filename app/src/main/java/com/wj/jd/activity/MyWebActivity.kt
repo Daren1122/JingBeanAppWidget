@@ -82,6 +82,7 @@ class MyWebActivity : BaseActivity() {
             }
 
             override fun onFail() {
+                Toast.makeText(MyApplication.mInstance, "连接错误！", Toast.LENGTH_SHORT).show()
             }
         })
 
