@@ -86,7 +86,7 @@
                 android:layout_marginTop="@dimen/dp_10"
                 android:layout_marginRight="@dimen/dp_25"
                 android:background="@drawable/background_count_down_bac"
-                android:text="挂豆子"
+                android:text="上传CK挂豆子"
                 android:textColor="@color/white"
                 android:textSize="@dimen/dp_16"
                 android:visibility="visible" />
