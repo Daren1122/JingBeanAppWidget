@@ -74,7 +74,6 @@ class MainActivity : BaseActivity() {
         registerReceiver(notificationUpdateReceiver2, intentFilter2)
     }
 
-
     private fun checkAppUpdate() {
         HttpUtil.getAppVer(object : StringCallBack {
             override fun onSuccess(result: String) {
