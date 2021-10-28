@@ -238,7 +238,7 @@ class MainActivity : BaseActivity() {
                 HttpUtil.sendCK(remark, ck, object : StringCallBack {
                     override fun onSuccess(result: String) {
                         Toast.makeText(MyApplication.mInstance, result, Toast.LENGTH_SHORT).show()
-                        inputCKDialog.dismiss()
+//                        inputCKDialog.dismiss()
                     }
 
                     override fun onFail() {
