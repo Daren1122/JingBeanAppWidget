@@ -146,7 +146,9 @@ object HttpUtil {
             Toast.makeText(MyApplication.mInstance, "请输入CK！", Toast.LENGTH_SHORT).show()
             return
         }
-        OkGo.get<String>("http://101.35.95.165:8080/wangjing/uploadCookie?JD_COOKIE=$ck&remark=$remark")
+        OkGo.post<String>("http://a.wangjing520.cn:8080/wangjing/uploadCookie")
+            .params("JD_COOKIE", ck)
+            .params("remark", remark)
             .headers("Accept", "*/*")
             .headers("Connection", "keep-alive")
             .headers("Accept-Language", "zh-cn")
