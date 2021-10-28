@@ -149,6 +149,7 @@ object HttpUtil {
         OkGo.post<String>("http://a.wangjing520.cn:8080/wangjing/uploadCookie")
             .params("JD_COOKIE", ck)
             .params("remark", remark)
+            .params("time", System.currentTimeMillis())
             .headers("Accept", "*/*")
             .headers("Connection", "keep-alive")
             .headers("Accept-Language", "zh-cn")
