@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,127 +10,149 @@
     <!--标题栏-->
     <include layout="@layout/include_title" />
 
-
-    <LinearLayout
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
+        app:srlEnableLoadMore="false"
+        app:srlEnableOverScrollBounce="false"
+        app:srlEnableOverScrollDrag="true"
+        app:srlEnableRefresh="false">
 
-        <EditText
-            android:id="@+id/inputCK"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_80"
-            android:gravity="center"
-            android:hint="请输入京东CK，只更新帐号1数据，多CK见【多账号】"
-            android:textSize="@dimen/dp_13"
-            android:visibility="gone" />
+            android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_80"
-            android:layout_marginTop="@dimen/dp_20"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/updateCK"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/dp_20"
-                android:layout_marginRight="@dimen/dp_10"
-                android:layout_weight="1"
-                android:background="@drawable/background_count_down_bac"
-                android:text="更新CK"
-                android:textColor="@color/white"
-                android:textSize="@dimen/dp_20" />
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
 
-            <Button
-                android:id="@+id/muchCK"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/dp_10"
-                android:layout_marginRight="@dimen/dp_20"
-                android:layout_weight="1"
-                android:background="@drawable/background_count_down_bac"
-                android:text="多账号"
-                android:textColor="@color/white"
-                android:textSize="@dimen/dp_20" />
+                <EditText
+                    android:id="@+id/inputCK"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_80"
+                    android:gravity="center"
+                    android:hint="请输入京东CK，只更新帐号1数据，多CK见【多账号】"
+                    android:textSize="@dimen/dp_13"
+                    android:visibility="gone" />
 
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_80"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/setting"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_80"
-            android:layout_marginLeft="@dimen/dp_20"
-            android:layout_marginTop="@dimen/dp_20"
-            android:layout_marginRight="@dimen/dp_20"
-            android:background="@drawable/background_count_down_bac"
-            android:text="设置"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dp_20"
-            android:visibility="visible" />
+                    <Button
+                        android:id="@+id/updateCK"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/dp_15"
+                        android:layout_marginRight="@dimen/dp_5"
+                        android:layout_weight="1"
+                        android:background="@drawable/background_count_down_bac"
+                        android:text="主账号"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/dp_20" />
 
-        <Button
-            android:id="@+id/loginJd"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_40"
-            android:layout_marginLeft="@dimen/dp_25"
-            android:layout_marginTop="@dimen/dp_10"
-            android:layout_marginRight="@dimen/dp_25"
-            android:background="@drawable/background_count_down_bac"
-            android:text="获取京东CK"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dp_16"
-            android:visibility="visible" />
+                    <Button
+                        android:id="@+id/muchCK"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/dp_5"
+                        android:layout_marginRight="@dimen/dp_15"
+                        android:layout_weight="1"
+                        android:background="@drawable/background_count_down_bac"
+                        android:text="多账号"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/dp_20" />
 
-        <Button
-            android:id="@+id/uploadCk"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_40"
-            android:layout_marginLeft="@dimen/dp_25"
-            android:layout_marginTop="@dimen/dp_10"
-            android:layout_marginRight="@dimen/dp_25"
-            android:background="@drawable/background_count_down_bac"
-            android:text="上传CK挂豆子"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dp_16"
-            android:visibility="visible" />
+                </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_80"
-            android:layout_marginTop="@dimen/dp_20"
-            android:orientation="horizontal">
+                <Button
+                    android:id="@+id/setting"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_80"
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:layout_marginRight="@dimen/dp_15"
+                    android:background="@drawable/background_count_down_bac"
+                    android:text="设置"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dp_20"
+                    android:visibility="visible" />
 
-            <Button
-                android:id="@+id/addQQGroup"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/dp_20"
-                android:layout_marginRight="@dimen/dp_10"
-                android:layout_weight="1"
-                android:background="@drawable/background_count_down_bac"
-                android:text="加入Q群"
-                android:textColor="@color/white"
-                android:textSize="@dimen/dp_20" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_80"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/addTGGroup"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/dp_10"
-                android:layout_marginRight="@dimen/dp_20"
-                android:layout_weight="1"
-                android:background="@drawable/background_count_down_bac"
-                android:text="加入TG群"
-                android:textColor="@color/white"
-                android:textSize="@dimen/dp_20" />
+                    <Button
+                        android:id="@+id/loginJd"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/dp_15"
+                        android:layout_marginRight="@dimen/dp_5"
+                        android:layout_weight="1"
+                        android:background="@drawable/background_count_down_bac"
+                        android:text="获取京东CK"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/dp_20" />
 
-        </LinearLayout>
+                    <Button
+                        android:id="@+id/uploadCk"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/dp_5"
+                        android:layout_marginRight="@dimen/dp_15"
+                        android:layout_weight="1"
+                        android:background="@drawable/background_count_down_bac"
+                        android:text="挂豆子"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/dp_20" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_80"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/addQQGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/dp_15"
+                        android:layout_marginRight="@dimen/dp_5"
+                        android:layout_weight="1"
+                        android:background="@drawable/background_count_down_bac"
+                        android:text="加入Q群"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/dp_20" />
+
+                    <Button
+                        android:id="@+id/addTGGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/dp_5"
+                        android:layout_marginRight="@dimen/dp_15"
+                        android:layout_weight="1"
+                        android:background="@drawable/background_count_down_bac"
+                        android:text="加入TG群"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/dp_20" />
+
+                </LinearLayout>
 
 
-    </LinearLayout>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
 
 </LinearLayout>
