@@ -52,7 +52,7 @@ class MuchCkActivity : BaseActivity() {
             if (TextUtils.isEmpty(inputCK3.text.toString())) {
                 Toast.makeText(this, "CK为空，添加失败", Toast.LENGTH_SHORT).show()
             } else {
-                CacheUtil.putString("ck3", inputCK2.text.toString())
+                CacheUtil.putString("ck3", inputCK3.text.toString())
                 Toast.makeText(this, "CK4添加成功", Toast.LENGTH_SHORT).show()
                 UpdateTask.widgetUpdateDataUtil3.updateWidget("ck3")
             }
@@ -62,7 +62,7 @@ class MuchCkActivity : BaseActivity() {
             if (TextUtils.isEmpty(inputCK4.text.toString())) {
                 Toast.makeText(this, "CK为空，添加失败", Toast.LENGTH_SHORT).show()
             } else {
-                CacheUtil.putString("ck4", inputCK2.text.toString())
+                CacheUtil.putString("ck4", inputCK4.text.toString())
                 Toast.makeText(this, "CK5添加成功", Toast.LENGTH_SHORT).show()
                 UpdateTask.widgetUpdateDataUtil4.updateWidget("ck4")
             }

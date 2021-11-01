@@ -35,6 +35,10 @@ class MainActivity : BaseActivity() {
     private lateinit var notificationUpdateReceiver1: NotificationUpdateReceiver1
     private lateinit var notificationUpdateReceiver2: NotificationUpdateReceiver2
 
+    private lateinit var notificationUpdateReceiver3: NotificationUpdateReceiver3
+    private lateinit var notificationUpdateReceiver4: NotificationUpdateReceiver4
+    private lateinit var notificationUpdateReceiver5: NotificationUpdateReceiver5
+
     override fun setLayoutId(): Int {
         return R.layout.activity_main
     }
@@ -76,6 +80,21 @@ class MainActivity : BaseActivity() {
         intentFilter2.addAction("com.scott.sayhi2")
         notificationUpdateReceiver2 = NotificationUpdateReceiver2()
         registerReceiver(notificationUpdateReceiver2, intentFilter2)
+
+        val intentFilter3 = IntentFilter()
+        intentFilter3.addAction("com.scott.sayhi3")
+        notificationUpdateReceiver3 = NotificationUpdateReceiver3()
+        registerReceiver(notificationUpdateReceiver3, intentFilter3)
+
+        val intentFilter4 = IntentFilter()
+        intentFilter4.addAction("com.scott.sayhi4")
+        notificationUpdateReceiver4 = NotificationUpdateReceiver4()
+        registerReceiver(notificationUpdateReceiver4, intentFilter4)
+
+        val intentFilter5 = IntentFilter()
+        intentFilter5.addAction("com.scott.sayhi5")
+        notificationUpdateReceiver5 = NotificationUpdateReceiver5()
+        registerReceiver(notificationUpdateReceiver5, intentFilter5)
     }
 
     private fun checkAppUpdate() {
@@ -303,8 +322,29 @@ class MainActivity : BaseActivity() {
 
     inner class NotificationUpdateReceiver2 : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            Log.i("====", "NotificationUpdateReceiver1")
+            Log.i("====", "NotificationUpdateReceiver2")
             UpdateTask.widgetUpdateDataUtil2.updateWidget("ck2")
+        }
+    }
+
+    inner class NotificationUpdateReceiver3 : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            Log.i("====", "NotificationUpdateReceiver3")
+            UpdateTask.widgetUpdateDataUtil3.updateWidget("ck3")
+        }
+    }
+
+    inner class NotificationUpdateReceiver4 : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            Log.i("====", "NotificationUpdateReceiver4")
+            UpdateTask.widgetUpdateDataUtil4.updateWidget("ck4")
+        }
+    }
+
+    inner class NotificationUpdateReceiver5 : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            Log.i("====", "NotificationUpdateReceiver5")
+            UpdateTask.widgetUpdateDataUtil5.updateWidget("ck5")
         }
     }
 }
