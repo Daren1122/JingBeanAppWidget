@@ -23,6 +23,7 @@ import com.wj.jd.bean.VersionBean
 import com.wj.jd.dialog.InputCKDialog
 import com.wj.jd.dialog.InputDialog
 import com.wj.jd.dialog.NewStyleDialog
+import com.wj.jd.dialog.NormalInputCKDialog
 import com.wj.jd.util.*
 import com.zhy.base.fileprovider.FileProvider7
 import kotlinx.android.synthetic.main.activity_setting.*
@@ -201,7 +202,19 @@ class MainActivity : BaseActivity() {
         }
 
         updateCK.setOnClickListener {
+            val normalInputCKDialog = NormalInputCKDialog(this)
+            normalInputCKDialog.onOkClickListener = object : NormalInputCKDialog.OnOkClickListener {
+                override fun ok(ck: String, remark: String) {
+
+                }
+            }
+            normalInputCKDialog.pop()
+
+
+
             if (TextUtils.isEmpty(inputCK.text.toString())) {
+
+
                 Toast.makeText(this, "CK为空，添加失败", Toast.LENGTH_SHORT).show()
             } else {
                 CacheUtil.putString("ck", inputCK.text.toString())
