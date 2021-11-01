@@ -25,22 +25,22 @@ object UpdateTask {
         }
         handler.postDelayed({
             widgetUpdateDataUtil1.updateWidget("ck1")
-        }, 2500)
+        }, 2000)
 
         handler.postDelayed({
             widgetUpdateDataUtil2.updateWidget("ck2")
-        }, 5000)
+        }, 4000)
 
         handler.postDelayed({
             widgetUpdateDataUtil3.updateWidget("ck3")
-        }, 7500)
+        }, 6000)
 
         handler.postDelayed({
             widgetUpdateDataUtil4.updateWidget("ck4")
-        }, 10000)
+        }, 8000)
 
         handler.postDelayed({
             widgetUpdateDataUtil5.updateWidget("ck5")
-        }, 12500)
+        }, 10000)
     }
 }

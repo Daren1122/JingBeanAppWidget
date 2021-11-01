@@ -21,6 +21,10 @@ class MuchCkActivity : BaseActivity() {
     override fun initData() {
         inputCK1.setText(CacheUtil.getString("ck1"))
         inputCK2.setText(CacheUtil.getString("ck2"))
+
+        inputCK3.setText(CacheUtil.getString("ck3"))
+        inputCK4.setText(CacheUtil.getString("ck4"))
+        inputCK5.setText(CacheUtil.getString("ck5"))
     }
 
     override fun setEvent() {
@@ -41,6 +45,36 @@ class MuchCkActivity : BaseActivity() {
                 CacheUtil.putString("ck2", inputCK2.text.toString())
                 Toast.makeText(this, "CK3添加成功", Toast.LENGTH_SHORT).show()
                 UpdateTask.widgetUpdateDataUtil2.updateWidget("ck2")
+            }
+        }
+
+        updateCK3.setOnClickListener {
+            if (TextUtils.isEmpty(inputCK3.text.toString())) {
+                Toast.makeText(this, "CK为空，添加失败", Toast.LENGTH_SHORT).show()
+            } else {
+                CacheUtil.putString("ck3", inputCK2.text.toString())
+                Toast.makeText(this, "CK4添加成功", Toast.LENGTH_SHORT).show()
+                UpdateTask.widgetUpdateDataUtil3.updateWidget("ck3")
+            }
+        }
+
+        updateCK4.setOnClickListener {
+            if (TextUtils.isEmpty(inputCK4.text.toString())) {
+                Toast.makeText(this, "CK为空，添加失败", Toast.LENGTH_SHORT).show()
+            } else {
+                CacheUtil.putString("ck4", inputCK2.text.toString())
+                Toast.makeText(this, "CK5添加成功", Toast.LENGTH_SHORT).show()
+                UpdateTask.widgetUpdateDataUtil4.updateWidget("ck4")
+            }
+        }
+
+        updateCK5.setOnClickListener {
+            if (TextUtils.isEmpty(inputCK5.text.toString())) {
+                Toast.makeText(this, "CK为空，添加失败", Toast.LENGTH_SHORT).show()
+            } else {
+                CacheUtil.putString("ck5", inputCK5.text.toString())
+                Toast.makeText(this, "CK6添加成功", Toast.LENGTH_SHORT).show()
+                UpdateTask.widgetUpdateDataUtil5.updateWidget("ck5")
             }
         }
     }
