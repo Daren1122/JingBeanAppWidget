@@ -14,6 +14,9 @@ object UpdateTask {
     var widgetUpdateDataUtil = WidgetUpdateDataUtil()
     var widgetUpdateDataUtil1 = WidgetUpdateDataUtil()
     var widgetUpdateDataUtil2 = WidgetUpdateDataUtil()
+    var widgetUpdateDataUtil3 = WidgetUpdateDataUtil()
+    var widgetUpdateDataUtil4 = WidgetUpdateDataUtil()
+    var widgetUpdateDataUtil5 = WidgetUpdateDataUtil()
 
     var handler = Handler(Looper.getMainLooper())
 
@@ -28,5 +31,17 @@ object UpdateTask {
         handler.postDelayed({
             widgetUpdateDataUtil2.updateWidget("ck2")
         }, 5000)
+
+        handler.postDelayed({
+            widgetUpdateDataUtil3.updateWidget("ck3")
+        }, 7500)
+
+        handler.postDelayed({
+            widgetUpdateDataUtil4.updateWidget("ck4")
+        }, 10000)
+
+        handler.postDelayed({
+            widgetUpdateDataUtil5.updateWidget("ck5")
+        }, 12500)
     }
 }
