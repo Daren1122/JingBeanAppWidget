@@ -10,24 +10,26 @@
     <!--标题栏-->
     <include layout="@layout/include_title" />
 
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srlEnableLoadMore="false"
-        app:srlEnableOverScrollBounce="false"
-        app:srlEnableOverScrollDrag="true"
-        app:srlEnableRefresh="false">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:src="@mipmap/back" />
 
-            <ImageView
-                android:scaleType="fitXY"
-                android:src="@mipmap/back"
-                android:adjustViewBounds="true"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srlEnableLoadMore="false"
+            app:srlEnableOverScrollBounce="false"
+            app:srlEnableOverScrollDrag="true"
+            app:srlEnableRefresh="false">
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -154,12 +156,9 @@
 
                 </LinearLayout>
 
-
             </LinearLayout>
 
-        </RelativeLayout>
-
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
-
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    </RelativeLayout>
 
 </LinearLayout>
