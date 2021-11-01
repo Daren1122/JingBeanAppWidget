@@ -28,6 +28,7 @@ import com.wj.jd.util.*
 import com.zhy.base.fileprovider.FileProvider7
 import kotlinx.android.synthetic.main.activity_setting.*
 import kotlinx.android.synthetic.main.include_title.*
+import org.json.JSONObject
 import java.io.File
 
 class MainActivity : BaseActivity() {
@@ -260,18 +261,51 @@ class MainActivity : BaseActivity() {
         val inputCKDialog = InputCKDialog(this)
         inputCKDialog.onOkClickListener = object : InputCKDialog.OnOkClickListener {
             override fun ok(ck: String, remark: String) {
-                HttpUtil.sendCK(remark, ck, object : StringCallBack {
-                    override fun onSuccess(result: String) {
-                        Toast.makeText(MyApplication.mInstance, result, Toast.LENGTH_SHORT).show()
-                    }
-
-                    override fun onFail() {
-                        Toast.makeText(MyApplication.mInstance, "连接错误！", Toast.LENGTH_SHORT).show()
-                    }
-                })
+                checkCk(ck, remark)
             }
         }
         inputCKDialog.pop()
+    }
+
+    private fun checkCk(ck: String, remark: String) {
+        if (TextUtils.isEmpty(remark)) {
+            Toast.makeText(MyApplication.mInstance, "请输入备注！", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (TextUtils.isEmpty(ck)) {
+            Toast.makeText(MyApplication.mInstance, "请输入CK！", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        Toast.makeText(MyApplication.mInstance, "正在检测CK有效性...", Toast.LENGTH_SHORT).show()
+        HttpUtil.getUserInfoByCk(ck, object : StringCallBack {
+            override fun onSuccess(result: String) {
+                val job = JSONObject(result)
+                try {
+                    var name = job.optJSONObject("data").optJSONObject("userInfo").optJSONObject("baseInfo").optString("nickname")
+                    if (!TextUtils.isEmpty(name)) {
+                        HttpUtil.sendCK(remark, ck, object : StringCallBack {
+                            override fun onSuccess(result: String) {
+                                Toast.makeText(MyApplication.mInstance, result, Toast.LENGTH_SHORT).show()
+                            }
+
+                            override fun onFail() {
+                                Toast.makeText(MyApplication.mInstance, "连接错误！", Toast.LENGTH_SHORT).show()
+                            }
+                        })
+                    } else {
+                        Toast.makeText(MyApplication.mInstance, "CK有效性检测未通过，提交失败...", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(MyApplication.mInstance, "CK有效性检测未通过，提交失败...", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFail() {
+                Toast.makeText(MyApplication.mInstance, "连接失败...", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     /*

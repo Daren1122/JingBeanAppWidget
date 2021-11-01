@@ -43,13 +43,36 @@ object HttpUtil {
         Log.i("====key", key)
         var str = getCK(key)
         if (TextUtils.isEmpty(str)) return
-        str =
-            str + "User-Agent" + "=" + "jdapp;iPhone;10.0.2;14.3;network/wifi;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;"
+        str = str + "User-Agent" + "=" + "jdapp;iPhone;10.0.2;14.3;network/wifi;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;"
         str = str + "Accept-Language" + "=" + "zh-cn;"
         str = str + "Referer" + "=" + "https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&"
         str = str + "Accept-Encoding" + "=" + "gzip, deflate, br"
         OkGo.get<String>("https://me-api.jd.com/user_new/info/GetJDUserInfoUnion")
             .tag(key)
+            .headers("Host", "me-api.jd.com")
+            .headers("Accept", "*/*")
+            .headers("Connection", "keep-alive")
+            .headers("Cookie", str)
+
+            .execute(object : StringCallback() {
+                override fun onSuccess(response: Response<String>) {
+                    callback?.onSuccess(response.body())
+                }
+
+                override fun onError(response: Response<String>) {
+                    super.onError(response)
+                }
+            })
+    }
+
+    fun getUserInfoByCk(ck: String, callback: StringCallBack?) {
+        var str = ck
+        if (TextUtils.isEmpty(str)) return
+        str = str + "User-Agent" + "=" + "jdapp;iPhone;10.0.2;14.3;network/wifi;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;"
+        str = str + "Accept-Language" + "=" + "zh-cn;"
+        str = str + "Referer" + "=" + "https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&"
+        str = str + "Accept-Encoding" + "=" + "gzip, deflate, br"
+        OkGo.get<String>("https://me-api.jd.com/user_new/info/GetJDUserInfoUnion")
             .headers("Host", "me-api.jd.com")
             .headers("Accept", "*/*")
             .headers("Connection", "keep-alive")
@@ -138,14 +161,6 @@ object HttpUtil {
     }
 
     fun sendCK(remark: String, ck: String, callback: StringCallBack?) {
-        if (TextUtils.isEmpty(remark)) {
-            Toast.makeText(MyApplication.mInstance, "请输入备注！", Toast.LENGTH_SHORT).show()
-            return
-        }
-        if (TextUtils.isEmpty(ck)) {
-            Toast.makeText(MyApplication.mInstance, "请输入CK！", Toast.LENGTH_SHORT).show()
-            return
-        }
         OkGo.post<String>("http://a.wangjing520.cn:8080/wangjing/uploadCookie")
             .params("JD_COOKIE", ck)
             .params("remark", remark)
