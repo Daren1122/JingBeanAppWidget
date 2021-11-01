@@ -31,6 +31,7 @@ class NormalInputCKDialog(var mActivity: Activity) : Dialog(mActivity!!) {
         inputRemark = findViewById(R.id.inputRemark)
         inputRemark.visibility = View.GONE
         ok = findViewById(R.id.ok)
+        ok.text = "更新帐号1CK"
         val divierId = context.resources.getIdentifier("android:id/titleDivider", null, null)
         val divider = findViewById<View>(divierId)
         divider?.setBackgroundColor(Color.TRANSPARENT)
@@ -42,6 +43,7 @@ class NormalInputCKDialog(var mActivity: Activity) : Dialog(mActivity!!) {
             } else {
                 onOkClickListener?.ok(input.text.toString(), inputRemark.text.toString())
             }
+            dismiss()
         }
         return this
     }

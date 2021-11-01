@@ -205,23 +205,16 @@ class MainActivity : BaseActivity() {
             val normalInputCKDialog = NormalInputCKDialog(this)
             normalInputCKDialog.onOkClickListener = object : NormalInputCKDialog.OnOkClickListener {
                 override fun ok(ck: String, remark: String) {
-
+                    if (TextUtils.isEmpty(ck)) {
+                        Toast.makeText(this@MainActivity, "CK为空，添加失败", Toast.LENGTH_SHORT).show()
+                    } else {
+                        CacheUtil.putString("ck", ck)
+                        Toast.makeText(this@MainActivity, "CK添加成功", Toast.LENGTH_SHORT).show()
+                        UpdateTask.widgetUpdateDataUtil.updateWidget("ck")
+                    }
                 }
             }
             normalInputCKDialog.pop()
-
-
-
-            if (TextUtils.isEmpty(inputCK.text.toString())) {
-
-
-                Toast.makeText(this, "CK为空，添加失败", Toast.LENGTH_SHORT).show()
-            } else {
-                CacheUtil.putString("ck", inputCK.text.toString())
-                Toast.makeText(this, "CK添加成功", Toast.LENGTH_SHORT).show()
-                inputCK.setText("")
-                UpdateTask.widgetUpdateDataUtil.updateWidget("ck")
-            }
         }
 
         addQQGroup.setOnClickListener {
@@ -251,7 +244,6 @@ class MainActivity : BaseActivity() {
                 HttpUtil.sendCK(remark, ck, object : StringCallBack {
                     override fun onSuccess(result: String) {
                         Toast.makeText(MyApplication.mInstance, result, Toast.LENGTH_SHORT).show()
-//                        inputCKDialog.dismiss()
                     }
 
                     override fun onFail() {
