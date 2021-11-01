@@ -364,8 +364,20 @@ class WidgetUpdateDataUtil {
             "ck1" -> {
                 "com.scott.sayhi1"
             }
-            else -> {
+            "ck2" -> {
                 "com.scott.sayhi2"
+            }
+            "ck3" -> {
+                "com.scott.sayhi3"
+            }
+            "ck4" -> {
+                "com.scott.sayhi4"
+            }
+            "ck5" -> {
+                "com.scott.sayhi5"
+            }
+            else -> {
+                ""
             }
         }
         val clearIntent3 = PendingIntent.getBroadcast(MyApplication.mInstance, 0, cleatIntent, PendingIntent.FLAG_UPDATE_CURRENT)
