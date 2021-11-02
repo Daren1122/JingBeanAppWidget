@@ -41,6 +41,7 @@ class InputCKDialog(var mActivity: Activity) : Dialog(mActivity!!) {
             } else {
                 onOkClickListener?.ok(input.text.toString(), inputRemark.text.toString())
             }
+            dismiss()
         }
         return this
     }

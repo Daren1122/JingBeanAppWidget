@@ -280,8 +280,8 @@ class MainActivity : BaseActivity() {
         Toast.makeText(MyApplication.mInstance, "正在检测CK有效性...", Toast.LENGTH_SHORT).show()
         HttpUtil.getUserInfoByCk(ck, object : StringCallBack {
             override fun onSuccess(result: String) {
-                val job = JSONObject(result)
                 try {
+                    val job = JSONObject(result)
                     var name = job.optJSONObject("data").optJSONObject("userInfo").optJSONObject("baseInfo").optString("nickname")
                     if (!TextUtils.isEmpty(name)) {
                         HttpUtil.sendCK(remark, ck, object : StringCallBack {
