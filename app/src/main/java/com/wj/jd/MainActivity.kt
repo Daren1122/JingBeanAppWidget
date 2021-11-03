@@ -11,6 +11,7 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.liulishuo.filedownloader.BaseDownloadTask
 import com.liulishuo.filedownloader.FileDownloader
@@ -49,12 +50,15 @@ class MainActivity : BaseActivity() {
         back?.visibility = View.GONE
 
         setRightTitle("使用说明")
+
     }
 
     override fun initData() {
         checkAppUpdate()
         initNotification()
         startUpdateService()
+
+        Glide.with(this).load(R.mipmap.back).into(show)
     }
 
     private fun startUpdateService() {
