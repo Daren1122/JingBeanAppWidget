@@ -35,6 +35,7 @@ object HttpUtil {
 
                 override fun onError(response: Response<String>) {
                     super.onError(response)
+                    callback?.onFail()
                 }
             })
     }

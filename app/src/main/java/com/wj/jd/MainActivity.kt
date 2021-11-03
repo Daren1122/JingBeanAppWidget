@@ -57,8 +57,6 @@ class MainActivity : BaseActivity() {
         checkAppUpdate()
         initNotification()
         startUpdateService()
-
-        Glide.with(this).load(R.mipmap.back).into(show)
     }
 
     private fun startUpdateService() {
@@ -136,8 +134,8 @@ class MainActivity : BaseActivity() {
             }
 
             override fun onFail() {
+                Glide.with(this@MainActivity).load(R.mipmap.back).into(show)
             }
-
         })
     }
 
