@@ -294,7 +294,11 @@ class MainActivity : BaseActivity() {
                     if (!TextUtils.isEmpty(name)) {
                         HttpUtil.sendCK(remark, ck, object : StringCallBack {
                             override fun onSuccess(result: String) {
-                                Toast.makeText(MyApplication.mInstance, result, Toast.LENGTH_SHORT).show()
+                                createDialogTip(result,object :NewStyleDialog.OnRightClickListener{
+                                    override fun rightClick() {
+                                        disMissDialog()
+                                    }
+                                })
                             }
 
                             override fun onFail() {
