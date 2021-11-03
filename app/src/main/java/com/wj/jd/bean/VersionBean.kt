@@ -11,4 +11,5 @@ class VersionBean {
     var release: String? = null
     var content: String? = null
     var widgetTip = ""
+    var mainImg = ""
 }

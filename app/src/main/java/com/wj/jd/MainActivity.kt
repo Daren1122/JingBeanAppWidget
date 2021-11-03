@@ -128,6 +128,12 @@ class MainActivity : BaseActivity() {
                             })
                         }
                     }
+                    if (TextUtils.isEmpty(versionBean.mainImg)) {
+                        Glide.with(this@MainActivity).load(R.mipmap.back).into(show)
+                    } else {
+                        Glide.with(this@MainActivity).load(versionBean.mainImg).into(show)
+                    }
+
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
