@@ -175,8 +175,8 @@ class WidgetUpdateDataUtil {
                         val detail = dataList[i]
                         val beanDay = parseTime(detail.date)!!
                         if (beanDay > todayTime) {
-                            if (detail.amount > 0) {
-                                userBean.todayBean = userBean.todayBean + detail.amount
+                            if (detail.amount > 0 && !detail.eventMassage.contains("退还")) {
+                                userBean.todayBean += detail.amount
                             }
                         } else {
                             isFinish = false
