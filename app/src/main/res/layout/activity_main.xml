@@ -22,8 +22,8 @@
 
         <!--标题栏-->
         <include
-            layout="@layout/include_title"
-            android:visibility="gone" />
+            layout="@layout/include_title_main"
+            android:visibility="visible" />
 
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
             android:layout_width="match_parent"
