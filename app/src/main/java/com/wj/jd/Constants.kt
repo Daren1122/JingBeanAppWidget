@@ -8,5 +8,5 @@ package com.wj.jd
 object Constants {
     var isDebug = false
 
-    var HOST_URL = "http://49.233.63.9:8080/"
+    var HOST_URL = "http://101.35.95.165:8080/"
 }
