@@ -11,7 +11,6 @@ class UserBean {
     var ago2Bean = 0
     var ago3Bean = 0
     var ago4Bean = 0
-    var ago5Bean = 0
 
     var hb = "--"
     var gqhb = "--"

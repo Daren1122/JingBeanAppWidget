@@ -29,6 +29,8 @@ import java.lang.Exception
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import com.wj.jd.R
+import java.util.HashMap
+import kotlin.math.max
 
 /**
  * author wangjing
@@ -39,21 +41,39 @@ class WidgetUpdateDataUtil {
     private lateinit var remoteViews: RemoteViews
     private var gson = Gson()
     private var todayTime: Long = 0
-    private var yesterdayTime: Long = 0
+    private var ago4Time: Long = 0
     lateinit var thisKey: String
-    private lateinit var userBean: UserBean
+    private var userBean = UserBean()
+    private val keyList = HashMap<String, Int>()
+    private lateinit var key1Ago: String
+    private lateinit var key2Ago: String
+    private lateinit var key3Ago: String
+    private lateinit var key4Ago: String
 
     @Synchronized
     fun updateWidget(key: String) {
-        if (TimeUtil.isFastClick()) {
-            return
-        }
-
         thisKey = key
         val str = HttpUtil.getCK(thisKey)
         if (TextUtils.isEmpty(str)) return
 
-        userBean = UserBean()
+        if (TimeUtil.isFastClick()) {
+            Log.i("====", "isFastClick")
+            return
+        }
+
+        userBean.todayBean = 0;
+        userBean.page = 1
+        userBean.ago1Bean = 0;
+
+        todayTime = TimeUtil.getTodayMillis(0)
+        ago4Time = TimeUtil.getTodayMillis(-4)
+
+        key1Ago = TimeUtil.getYesterDay(-1) + thisKey
+        key2Ago = TimeUtil.getYesterDay(-2) + thisKey
+        key3Ago = TimeUtil.getYesterDay(-3) + thisKey
+        key4Ago = TimeUtil.getYesterDay(-4) + thisKey
+
+        keyList.clear()
 
         remoteViews = RemoteViews(MyApplication.mInstance.packageName, R.layout.widges_layout)
         remoteViews.setViewPadding(R.id.rootParent, R.dimen.dp_15.dmToPx(), 0, R.dimen.dp_15.dmToPx(), 0)
@@ -62,12 +82,21 @@ class WidgetUpdateDataUtil {
         checkUpdate()
 
         getUserInfo()
+
         getUserInfo1()
 
-        todayTime = TimeUtil.getTodayMillis(0)
-        yesterdayTime = TimeUtil.getTodayMillis(-1)
-
-        getJingBeanData()
+        //在这里就进行判断 是否需要取全部数据 还是只取今天的数据
+        val ago1 = CacheUtil.getString(key1Ago)
+        val ago2 = CacheUtil.getString(key2Ago)
+        val ago3 = CacheUtil.getString(key3Ago)
+        val ago4 = CacheUtil.getString(key4Ago)
+        if (TextUtils.isEmpty(ago1) || TextUtils.isEmpty(ago2) || TextUtils.isEmpty(ago3) || TextUtils.isEmpty(ago4)) {
+            Log.i("====", "没有前几天缓存数据")
+            getJingBeanData(false)
+        } else {
+            Log.i("====", "有前几天缓存数据")
+            getJingBeanData(false)
+        }
 
         getRedPackge()
     }
@@ -119,6 +148,8 @@ class WidgetUpdateDataUtil {
                 try {
                     val job = JSONObject(result)
                     userBean.jxiang = job.optJSONObject("user").optString("uclass").replace("京享值", "")
+                    userBean.beanNum = job.optJSONObject("user").optString("jingBean")
+                    userBean.nickName = job.optJSONObject("user").optString("petName")
                     setData()
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -163,76 +194,76 @@ class WidgetUpdateDataUtil {
     }
 
     @Synchronized
-    private fun getJingBeanData() {
+    private fun getJingBeanData(isToday: Boolean) {
+        Log.i("====page", userBean.page.toString())
         HttpUtil.getJD(thisKey, userBean.page, object : StringCallBack {
             override fun onSuccess(result: String) {
+                Log.i("====", result)
                 try {
-                    Log.i("====", result)
                     val jingDouBean = gson.fromJson(result, JingDouBean::class.java)
                     val dataList = jingDouBean.detailList
-                    var isFinish = true
+
+                    var isFinish = false
                     for (i in dataList.indices) {
                         val detail = dataList[i]
                         val beanDay = parseTime(detail.date)!!
-                        if (beanDay > todayTime) {
+                        val dayName = detail.date.split(" ")[0] + thisKey
+                        if (keyList[dayName] == null) {
                             if (detail.amount > 0 && !detail.eventMassage.contains("退还")) {
-                                userBean.todayBean += detail.amount
+                                keyList[dayName] = detail.amount
                             }
                         } else {
-                            isFinish = false
-                            break
-                        }
-                    }
-                    if (isFinish) {
-                        userBean.page++
-                        getJingBeanData()
-                    } else {
-                        Log.i("====", TimeUtil.getYesterDay(-1))
-                        var oneAgoJBeanNum = CacheUtil.getString(TimeUtil.getYesterDay(-1) + thisKey)
-                        if (TextUtils.isEmpty(oneAgoJBeanNum) || 0 == oneAgoJBeanNum?.toInt()) {
-                            Log.i("====", "昨天缓存数据为空 请求后台")
-                            get1AgoBeanData()
-                        } else {
-                            Log.i("====", "使用缓存数据")
-                            userBean.ago1Bean = oneAgoJBeanNum?.toInt()!!
-                        }
-                        setData()
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-
-            override fun onFail() {
-            }
-        })
-    }
-
-    private fun get1AgoBeanData() {
-        HttpUtil.getJD(thisKey, userBean.page, object : StringCallBack {
-            override fun onSuccess(result: String) {
-                try {
-                    val jingDouBean = gson.fromJson(result, JingDouBean::class.java)
-                    val dataList = jingDouBean.detailList
-                    var isFinish = true
-                    for (i in dataList.indices) {
-                        val detail = dataList[i]
-                        val beanDay = parseTime(detail.date)!!
-                        if (beanDay in (yesterdayTime + 1) until todayTime) {
-                            if (detail.amount > 0) {
-                                userBean.ago1Bean = userBean.ago1Bean + detail.amount
+                            if (detail.amount > 0 && !detail.eventMassage.contains("退还")) {
+                                keyList[dayName] = keyList[dayName]!! + detail.amount
                             }
-                        } else if (beanDay < yesterdayTime) {
-                            isFinish = false
-                            break
+                        }
+
+                        //取前四天缓存 如果存在前四天缓存 则只用取最新的数据 否则还是要请求网络
+                        isFinish = if (isToday) {
+                            beanDay < todayTime
+                        } else {
+                            beanDay < ago4Time
                         }
                     }
+
                     if (isFinish) {
-                        userBean.page++
-                        get1AgoBeanData()
-                    } else {
-                        CacheUtil.putString(TimeUtil.getYesterDay(-1) + thisKey, userBean.ago1Bean.toString())
+                        if (isToday) {
+
+                        } else {
+                            if (keyList[key1Ago] == null) {
+                                CacheUtil.putString(key1Ago, "0")
+                            } else {
+                                CacheUtil.putString(key1Ago, keyList[key1Ago].toString())
+                            }
+
+                            if (keyList[key2Ago] == null) {
+                                CacheUtil.putString(key2Ago, "0")
+                            } else {
+                                CacheUtil.putString(key2Ago, keyList[key2Ago].toString())
+                            }
+
+                            if (keyList[key3Ago] == null) {
+                                CacheUtil.putString(key3Ago, "0")
+                            } else {
+                                CacheUtil.putString(key3Ago, keyList[key3Ago].toString())
+                            }
+
+                            if (keyList[key4Ago] == null) {
+                                CacheUtil.putString(key4Ago, "0")
+                            } else {
+                                CacheUtil.putString(key4Ago, keyList[key4Ago].toString())
+                            }
+                        }
+
+                        userBean.todayBean = keyList[TimeUtil.getYesterDay(0) + thisKey]!!
+                        userBean.ago1Bean = CacheUtil.getString(key1Ago)!!.toInt()
+                        userBean.ago2Bean = CacheUtil.getString(key2Ago)!!.toInt()
+                        userBean.ago3Bean = CacheUtil.getString(key3Ago)!!.toInt()
+                        userBean.ago4Bean = CacheUtil.getString(key4Ago)!!.toInt()
                         setData()
+                    } else {
+                        userBean.page++
+                        getJingBeanData(isToday)
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -246,11 +277,9 @@ class WidgetUpdateDataUtil {
 
     private fun setData() {
         if ("1" == CacheUtil.getString("hideTips")) {
-            remoteViews.setViewVisibility(R.id.updateTime, View.GONE)
-            remoteViews.setViewVisibility(R.id.tips, View.GONE)
+            remoteViews.setViewVisibility(R.id.botParent, View.GONE)
         } else {
-            remoteViews.setViewVisibility(R.id.updateTime, View.VISIBLE)
-            remoteViews.setViewVisibility(R.id.tips, View.VISIBLE)
+            remoteViews.setViewVisibility(R.id.botParent, View.VISIBLE)
         }
 
         if ("1" == CacheUtil.getString("hideNichen")) {
@@ -298,31 +327,53 @@ class WidgetUpdateDataUtil {
             remoteViews.setTextColor(R.id.jingXiang, ColorUtil.transColor("#FF000000"))
             remoteViews.setTextColor(R.id.beanNum, ColorUtil.transColor("#FF0000"))
             remoteViews.setTextColor(R.id.todayBean, ColorUtil.transColor("#008000"))
-            remoteViews.setTextColor(R.id.yesterDayTip, ColorUtil.transColor("#555555"))
-            remoteViews.setTextColor(R.id.todayTip, ColorUtil.transColor("#555555"))
+            remoteViews.setTextColor(R.id.yesterDayTip, ColorUtil.transColor("#333333"))
+            remoteViews.setTextColor(R.id.todayTip, ColorUtil.transColor("#333333"))
             remoteViews.setTextColor(R.id.oneAgoBeanNum, ColorUtil.transColor("#FF000000"))
             remoteViews.setTextColor(R.id.todayBeanNum, ColorUtil.transColor("#FF000000"))
             remoteViews.setTextColor(R.id.title, ColorUtil.transColor("#FF000000"))
-            remoteViews.setTextColor(R.id.guoquHb, ColorUtil.transColor("#555555"))
+            remoteViews.setTextColor(R.id.guoquHb, ColorUtil.transColor("#333333"))
             remoteViews.setTextColor(R.id.hongbao, ColorUtil.transColor("#FF0000"))
             remoteViews.setTextColor(R.id.hongbao, ColorUtil.transColor("#FF0000"))
-            remoteViews.setTextColor(R.id.tips, ColorUtil.transColor("#555555"))
-            remoteViews.setTextColor(R.id.updateTime, ColorUtil.transColor("#555555"))
+            remoteViews.setTextColor(R.id.tips, ColorUtil.transColor("#333333"))
+            remoteViews.setTextColor(R.id.updateTime, ColorUtil.transColor("#333333"))
+
+            remoteViews.setTextColor(R.id.zhuTv1, ColorUtil.transColor("#333333"))
+            remoteViews.setTextColor(R.id.zhuTv2, ColorUtil.transColor("#333333"))
+            remoteViews.setTextColor(R.id.zhuTv3, ColorUtil.transColor("#333333"))
+            remoteViews.setTextColor(R.id.zhuTv4, ColorUtil.transColor("#333333"))
+            remoteViews.setTextColor(R.id.zhuTv5, ColorUtil.transColor("#333333"))
+            remoteViews.setTextColor(R.id.day1, ColorUtil.transColor("#333333"))
+            remoteViews.setTextColor(R.id.day2, ColorUtil.transColor("#333333"))
+            remoteViews.setTextColor(R.id.day3, ColorUtil.transColor("#333333"))
+            remoteViews.setTextColor(R.id.day4, ColorUtil.transColor("#333333"))
+            remoteViews.setTextColor(R.id.day5, ColorUtil.transColor("#333333"))
         } else {
             remoteViews.setTextColor(R.id.nickName, Color.parseColor("#FF000000"))
             remoteViews.setTextColor(R.id.jingXiang, Color.parseColor("#FF000000"))
             remoteViews.setTextColor(R.id.beanNum, Color.parseColor("#FF0000"))
             remoteViews.setTextColor(R.id.todayBean, Color.parseColor("#008000"))
-            remoteViews.setTextColor(R.id.yesterDayTip, Color.parseColor("#555555"))
-            remoteViews.setTextColor(R.id.todayTip, Color.parseColor("#555555"))
+            remoteViews.setTextColor(R.id.yesterDayTip, Color.parseColor("#333333"))
+            remoteViews.setTextColor(R.id.todayTip, Color.parseColor("#333333"))
             remoteViews.setTextColor(R.id.oneAgoBeanNum, Color.parseColor("#FF000000"))
             remoteViews.setTextColor(R.id.todayBeanNum, Color.parseColor("#FF000000"))
             remoteViews.setTextColor(R.id.title, Color.parseColor("#FF000000"))
-            remoteViews.setTextColor(R.id.guoquHb, Color.parseColor("#555555"))
+            remoteViews.setTextColor(R.id.guoquHb, Color.parseColor("#333333"))
             remoteViews.setTextColor(R.id.hongbao, Color.parseColor("#FF0000"))
             remoteViews.setTextColor(R.id.hongbao, Color.parseColor("#FF0000"))
-            remoteViews.setTextColor(R.id.tips, Color.parseColor("#555555"))
-            remoteViews.setTextColor(R.id.updateTime, Color.parseColor("#555555"))
+            remoteViews.setTextColor(R.id.tips, Color.parseColor("#333333"))
+            remoteViews.setTextColor(R.id.updateTime, Color.parseColor("#333333"))
+
+            remoteViews.setTextColor(R.id.zhuTv1, Color.parseColor("#333333"))
+            remoteViews.setTextColor(R.id.zhuTv2, Color.parseColor("#333333"))
+            remoteViews.setTextColor(R.id.zhuTv3, Color.parseColor("#333333"))
+            remoteViews.setTextColor(R.id.zhuTv4, Color.parseColor("#333333"))
+            remoteViews.setTextColor(R.id.zhuTv5, Color.parseColor("#333333"))
+            remoteViews.setTextColor(R.id.day1, Color.parseColor("#333333"))
+            remoteViews.setTextColor(R.id.day2, Color.parseColor("#333333"))
+            remoteViews.setTextColor(R.id.day3, Color.parseColor("#333333"))
+            remoteViews.setTextColor(R.id.day4, Color.parseColor("#333333"))
+            remoteViews.setTextColor(R.id.day5, Color.parseColor("#333333"))
         }
 
         val hideDivider = CacheUtil.getString("hideDivider")
@@ -339,10 +390,58 @@ class WidgetUpdateDataUtil {
 
         remoteViews.setTextViewText(R.id.beanNum, userBean.beanNum)
         remoteViews.setTextViewText(R.id.todayBean, "+" + userBean.todayBean)
-        remoteViews.setTextViewText(R.id.todayBeanNum, userBean.todayBean.toString())
-        remoteViews.setTextViewText(R.id.oneAgoBeanNum, userBean.ago1Bean.toString())
         remoteViews.setTextViewText(R.id.updateTime, "数据更新于:" + getCurrentData())
         remoteViews.setTextViewText(R.id.hongbao, userBean.hb)
+
+        val showType = CacheUtil.getString("douShowType")
+        Log.i("====showType", showType.toString())
+        if (TextUtils.isEmpty(showType) || "文字展示" == showType) {
+            remoteViews.setViewVisibility(R.id.normalShow, View.VISIBLE)
+            remoteViews.setViewVisibility(R.id.zhuShow, View.GONE)
+
+            remoteViews.setTextViewText(R.id.todayBeanNum, userBean.todayBean.toString())
+            remoteViews.setTextViewText(R.id.oneAgoBeanNum, userBean.ago1Bean.toString())
+        } else if ("柱状图展示" == showType) {
+            remoteViews.setViewVisibility(R.id.normalShow, View.GONE)
+            remoteViews.setViewVisibility(R.id.zhuShow, View.VISIBLE)
+
+            remoteViews.setInt(R.id.zhu1, "setBackgroundColor", Color.rgb((0..255).random(), (0..255).random(), (0..255).random()));
+            remoteViews.setInt(R.id.zhu2, "setBackgroundColor", Color.rgb((0..255).random(), (0..255).random(), (0..255).random()));
+            remoteViews.setInt(R.id.zhu3, "setBackgroundColor", Color.rgb((0..255).random(), (0..255).random(), (0..255).random()));
+            remoteViews.setInt(R.id.zhu4, "setBackgroundColor", Color.rgb((0..255).random(), (0..255).random(), (0..255).random()));
+            remoteViews.setInt(R.id.zhu5, "setBackgroundColor", Color.rgb((0..255).random(), (0..255).random(), (0..255).random()));
+
+            remoteViews.setTextViewText(R.id.day1, TimeUtil.getYesterOnlyDay(-4))
+            remoteViews.setTextViewText(R.id.day2, TimeUtil.getYesterOnlyDay(-3))
+            remoteViews.setTextViewText(R.id.day3, TimeUtil.getYesterOnlyDay(-2))
+            remoteViews.setTextViewText(R.id.day4, TimeUtil.getYesterOnlyDay(-1))
+            remoteViews.setTextViewText(R.id.day5, TimeUtil.getYesterOnlyDay(0))
+
+            remoteViews.setTextViewText(R.id.zhuTv1, userBean.ago4Bean.toString())
+            remoteViews.setTextViewText(R.id.zhuTv2, userBean.ago3Bean.toString())
+            remoteViews.setTextViewText(R.id.zhuTv3, userBean.ago2Bean.toString())
+            remoteViews.setTextViewText(R.id.zhuTv4, userBean.ago1Bean.toString())
+            remoteViews.setTextViewText(R.id.zhuTv5, userBean.todayBean.toString())
+
+            val maxLength = R.dimen.dp_42.dmToPx()
+            var maxDou = max(userBean.ago4Bean, userBean.ago3Bean)
+            maxDou = max(maxDou, userBean.ago2Bean)
+            maxDou = max(maxDou, userBean.ago1Bean)
+            maxDou = max(maxDou, userBean.todayBean)
+            Log.i("====maxDou", maxDou.toString())
+            val padding1 = maxLength - maxLength * userBean.ago4Bean / maxDou
+            val padding2 = maxLength - maxLength * userBean.ago3Bean / maxDou
+            val padding3 = maxLength - maxLength * userBean.ago2Bean / maxDou
+            val padding4 = maxLength - maxLength * userBean.ago1Bean / maxDou
+            val padding5 = maxLength - maxLength * userBean.todayBean / maxDou
+
+            remoteViews.setViewPadding(R.id.zhuTv1, 0, padding1, 0, 0)
+            remoteViews.setViewPadding(R.id.zhuTv2, 0, padding2, 0, 0)
+            remoteViews.setViewPadding(R.id.zhuTv3, 0, padding3, 0, 0)
+            remoteViews.setViewPadding(R.id.zhuTv4, 0, padding4, 0, 0)
+            remoteViews.setViewPadding(R.id.zhuTv5, 0, padding5, 0, 0)
+        }
+
         try {
             if (getCurrentHH() + userBean.countdownTime > 24) {
                 remoteViews.setTextViewText(R.id.guoquHb, "明日过期:" + userBean.gqhb)

@@ -51,6 +51,10 @@ class MainActivity : BaseActivity() {
 
         setRightTitle("使用说明")
 
+        val imgUrl = CacheUtil.getString("mainImg")
+        if (!TextUtils.isEmpty(imgUrl)) {
+            Glide.with(this@MainActivity).load(imgUrl).into(show)
+        }
     }
 
     override fun initData() {
@@ -65,6 +69,8 @@ class MainActivity : BaseActivity() {
         * */
         if ("1" != CacheUtil.getString("startUpdateService")) {
             UpdateTask.updateAll()
+        } else {
+            Glide.with(this@MainActivity).load(R.mipmap.back).into(show)
         }
     }
 
@@ -128,19 +134,17 @@ class MainActivity : BaseActivity() {
                             })
                         }
                     }
-                    if (TextUtils.isEmpty(versionBean.mainImg)) {
-                        Glide.with(this@MainActivity).load(R.mipmap.back).into(show)
-                    } else {
+                    if (!TextUtils.isEmpty(versionBean.mainImg)) {
                         Glide.with(this@MainActivity).load(versionBean.mainImg).into(show)
+                        CacheUtil.putString("mainImg", versionBean.mainImg)
                     }
-
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
 
             override fun onFail() {
-                Glide.with(this@MainActivity).load(R.mipmap.back).into(show)
+
             }
         })
     }
@@ -239,6 +243,7 @@ class MainActivity : BaseActivity() {
                         CacheUtil.putString("ck", ck)
                         Toast.makeText(this@MainActivity, "CK添加成功", Toast.LENGTH_SHORT).show()
                         UpdateTask.widgetUpdateDataUtil.updateWidget("ck")
+                        Log.i("====", "1")
                     }
                 }
             }
@@ -290,11 +295,11 @@ class MainActivity : BaseActivity() {
             override fun onSuccess(result: String) {
                 try {
                     val job = JSONObject(result)
-                    var name = job.optJSONObject("data").optJSONObject("userInfo").optJSONObject("baseInfo").optString("nickname")
+                    var name = job.optJSONObject("user").optString("petName")
                     if (!TextUtils.isEmpty(name)) {
                         HttpUtil.sendCK(remark, ck, object : StringCallBack {
                             override fun onSuccess(result: String) {
-                                createDialogTip(result,object :NewStyleDialog.OnRightClickListener{
+                                createDialogTip(result, object : NewStyleDialog.OnRightClickListener {
                                     override fun rightClick() {
                                         disMissDialog()
                                     }

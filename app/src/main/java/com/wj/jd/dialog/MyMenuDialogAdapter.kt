@@ -23,7 +23,8 @@ class MyMenuDialogAdapter(private val mActivity: Activity, var itemClick: (key: 
 
     override fun onBindViewHolder(holder: MyMenuDialogAdapter.MenuItem, position: Int) {
         holder.title.text = dataList?.get(position)
-        holder.title.setOnClickListener {
+
+        holder.itemView.setOnClickListener {
             itemClick(dataList?.get(holder.adapterPosition)!!)
             onItemClickListener?.click()
         }

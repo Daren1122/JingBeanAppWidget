@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.activity_setting.*
 
 class SettingActivity : BaseActivity() {
     var paddingDataList = ArrayList<String>()
+    var douShowTypeList = ArrayList<String>()
 
     override fun setLayoutId(): Int {
         return R.layout.activity_setting
@@ -26,6 +27,9 @@ class SettingActivity : BaseActivity() {
         paddingDataList.add("10dp")
         paddingDataList.add("15dp")
         paddingDataList.add("20dp")
+
+        douShowTypeList.add("文字展示")
+        douShowTypeList.add("柱状图展示")
     }
 
     override fun initData() {
@@ -44,6 +48,13 @@ class SettingActivity : BaseActivity() {
             "15dp"
         } else {
             paddingType
+        }
+
+        val douShowTypeTip = CacheUtil.getString("douShowType")
+        douShowType.text = if (TextUtils.isEmpty(douShowTypeTip)) {
+            "文字展示"
+        } else {
+            douShowTypeTip
         }
 
         var designColorTxt = CacheUtil.getString("designColor")
@@ -97,6 +108,14 @@ class SettingActivity : BaseActivity() {
         settingFinish.setOnClickListener {
             UpdateTask.updateAll()
             Toast.makeText(this, "小组件状态更新完毕", Toast.LENGTH_SHORT).show()
+        }
+
+        douShowType.setOnClickListener {
+            var menuDialog = MenuDialog(this, douShowTypeList) {
+                CacheUtil.putString("douShowType", it)
+                douShowType.text = it
+            }
+            menuDialog.pop()
         }
 
         paddingTip.setOnClickListener {

@@ -67,18 +67,14 @@ object HttpUtil {
     }
 
     fun getUserInfoByCk(ck: String, callback: StringCallBack?) {
-        var str = ck
-        if (TextUtils.isEmpty(str)) return
-        str = str + "User-Agent" + "=" + "jdapp;iPhone;10.0.2;14.3;network/wifi;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;"
-        str = str + "Accept-Language" + "=" + "zh-cn;"
-        str = str + "Referer" + "=" + "https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&"
-        str = str + "Accept-Encoding" + "=" + "gzip, deflate, br"
-        OkGo.get<String>("https://me-api.jd.com/user_new/info/GetJDUserInfoUnion")
-            .headers("Host", "me-api.jd.com")
-            .headers("Accept", "*/*")
+        if (TextUtils.isEmpty(ck)) return
+        OkGo.get<String>("https://wxapp.m.jd.com/kwxhome/myJd/home.json?&useGuideModule=0&bizId=&brandId=&fromType=wxapp&timestamp=" + System.currentTimeMillis())
+            .headers("Cookie", ck)
+            .headers("content-type", "application/x-www-form-urlencoded")
             .headers("Connection", "keep-alive")
-            .headers("Cookie", str)
-
+            .headers("Referer", "https://servicewechat.com/wxa5bf5ee667d91626/161/page-frame.html")
+            .headers("Host", "wxapp.m.jd.com")
+            .headers("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.10(0x18000a2a) NetType/WIFI Language/zh_CN")
             .execute(object : StringCallback() {
                 override fun onSuccess(response: Response<String>) {
                     callback?.onSuccess(response.body())
@@ -117,7 +113,7 @@ object HttpUtil {
         if (TextUtils.isEmpty(str)) return
         OkGo.post<String>("https://api.m.jd.com/client.action?functionId=getJingBeanBalanceDetail")
             .tag(key)
-            .params("body", "{\"pageSize\":\"80\",\"page\":\"$page\"}")
+            .params("body", "{\"pageSize\":\"100\",\"page\":\"$page\"}")
             .params("appid", "ld")
             .headers(
                 "User-Agent",

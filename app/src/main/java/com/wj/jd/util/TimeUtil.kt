@@ -42,7 +42,13 @@ object TimeUtil {
     fun getYesterDay(ago: Int): String {
         val cal = Calendar.getInstance()
         cal.add(Calendar.DATE, ago)
-        return SimpleDateFormat("yyyy-MM-dd ").format(cal.time)
+        return SimpleDateFormat("yyyy-MM-dd").format(cal.time)
+    }
+
+    fun getYesterOnlyDay(ago: Int): String {
+        val cal = Calendar.getInstance()
+        cal.add(Calendar.DATE, ago)
+        return SimpleDateFormat("dd").format(cal.time)
     }
 
     private var lastClickTime: Long = 0
