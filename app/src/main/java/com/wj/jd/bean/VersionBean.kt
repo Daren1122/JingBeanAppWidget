@@ -12,4 +12,5 @@ class VersionBean {
     var content: String? = null
     var widgetTip = ""
     var mainImg = ""
+    var isServelUpdate = ""
 }

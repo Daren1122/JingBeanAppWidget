@@ -1,5 +1,6 @@
 package com.wj.jd.activity
 
+import android.content.Intent
 import android.text.TextUtils
 import android.widget.Toast
 import com.wj.jd.BaseActivity
@@ -135,6 +136,11 @@ class SettingActivity : BaseActivity() {
                 }
             }
             inputDialog.pop()
+        }
+
+        goToSelect.setOnClickListener {
+            var intent = Intent(this, WidgetBackSelActivity::class.java)
+            startActivity(intent)
         }
     }
 }

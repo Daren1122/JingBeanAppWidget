@@ -1,5 +1,6 @@
 package com.wj.jd.bean;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class RedPacket {
@@ -111,11 +112,11 @@ public class RedPacket {
 
             public static class RedList {
                 private String activityName;
-                private String balance;
+                private BigDecimal balance;
                 private int beginTime;
                 private String delayRemark;
                 private String discount;
-                private int endTime;
+                private long endTime;
                 private String hbId;
                 private int hbState;
                 private boolean isDelay;
@@ -129,11 +130,11 @@ public class RedPacket {
                     this.activityName = activityName;
                 }
 
-                public String getBalance() {
+                public BigDecimal getBalance() {
                     return balance;
                 }
 
-                public void setBalance(String balance) {
+                public void setBalance(BigDecimal balance) {
                     this.balance = balance;
                 }
 
@@ -161,11 +162,11 @@ public class RedPacket {
                     this.discount = discount;
                 }
 
-                public int getEndTime() {
+                public long getEndTime() {
                     return endTime;
                 }
 
-                public void setEndTime(int endTime) {
+                public void setEndTime(long endTime) {
                     this.endTime = endTime;
                 }
 

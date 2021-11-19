@@ -12,6 +12,8 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.liulishuo.filedownloader.BaseDownloadTask
 import com.liulishuo.filedownloader.FileDownloader
@@ -33,13 +35,6 @@ import org.json.JSONObject
 import java.io.File
 
 class MainActivity : BaseActivity() {
-    private lateinit var notificationUpdateReceiver: NotificationUpdateReceiver
-    private lateinit var notificationUpdateReceiver1: NotificationUpdateReceiver1
-    private lateinit var notificationUpdateReceiver2: NotificationUpdateReceiver2
-
-    private lateinit var notificationUpdateReceiver3: NotificationUpdateReceiver3
-    private lateinit var notificationUpdateReceiver4: NotificationUpdateReceiver4
-    private lateinit var notificationUpdateReceiver5: NotificationUpdateReceiver5
 
     override fun setLayoutId(): Int {
         return R.layout.activity_main
@@ -53,13 +48,29 @@ class MainActivity : BaseActivity() {
 
         val imgUrl = CacheUtil.getString("mainImg")
         if (!TextUtils.isEmpty(imgUrl)) {
-            Glide.with(this@MainActivity).load(imgUrl).into(show)
+            val options = RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+            Glide.with(MyApplication.mInstance)
+                .load(imgUrl)
+                .apply(options)
+                .into(show)
+        } else {
+            val options = RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+            Glide.with(MyApplication.mInstance)
+                .load(R.mipmap.defbac)
+                .apply(options)
+                .into(show)
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        Log.i("====data", intent.getStringExtra("data").toString())
     }
 
     override fun initData() {
         checkAppUpdate()
-        initNotification()
         startUpdateService()
     }
 
@@ -69,75 +80,16 @@ class MainActivity : BaseActivity() {
         * */
         if ("1" != CacheUtil.getString("startUpdateService")) {
             UpdateTask.updateAll()
-        } else {
-            Glide.with(this@MainActivity).load(R.mipmap.back).into(show)
         }
-    }
-
-    private fun initNotification() {
-        val intentFilter = IntentFilter()
-        intentFilter.addAction("com.scott.sayhi")
-        notificationUpdateReceiver = NotificationUpdateReceiver()
-        registerReceiver(notificationUpdateReceiver, intentFilter)
-
-        val intentFilter1 = IntentFilter()
-        intentFilter1.addAction("com.scott.sayhi1")
-        notificationUpdateReceiver1 = NotificationUpdateReceiver1()
-        registerReceiver(notificationUpdateReceiver1, intentFilter1)
-
-        val intentFilter2 = IntentFilter()
-        intentFilter2.addAction("com.scott.sayhi2")
-        notificationUpdateReceiver2 = NotificationUpdateReceiver2()
-        registerReceiver(notificationUpdateReceiver2, intentFilter2)
-
-        val intentFilter3 = IntentFilter()
-        intentFilter3.addAction("com.scott.sayhi3")
-        notificationUpdateReceiver3 = NotificationUpdateReceiver3()
-        registerReceiver(notificationUpdateReceiver3, intentFilter3)
-
-        val intentFilter4 = IntentFilter()
-        intentFilter4.addAction("com.scott.sayhi4")
-        notificationUpdateReceiver4 = NotificationUpdateReceiver4()
-        registerReceiver(notificationUpdateReceiver4, intentFilter4)
-
-        val intentFilter5 = IntentFilter()
-        intentFilter5.addAction("com.scott.sayhi5")
-        notificationUpdateReceiver5 = NotificationUpdateReceiver5()
-        registerReceiver(notificationUpdateReceiver5, intentFilter5)
     }
 
     private fun checkAppUpdate() {
         HttpUtil.getAppVer(object : StringCallBack {
             override fun onSuccess(result: String) {
                 try {
-                    var gson = Gson()
+                    val gson = Gson()
                     val versionBean = gson.fromJson(result, VersionBean::class.java)
-                    if (DeviceUtil.getAppVersionName().equals(versionBean.release)) {
-                        Toast.makeText(this@MainActivity, "当前已是最新版本", Toast.LENGTH_SHORT).show()
-                    } else {
-                        if ("1" == versionBean.isUpdate) {
-                            createDialog("版本更新", versionBean.content, "更新", object : NewStyleDialog.OnRightClickListener {
-                                override fun rightClick() {
-                                    downLoadApk(versionBean.content_url)
-                                }
-                            })
-                        } else {
-                            createDialog("版本更新", versionBean.content, "取消", "更新", object : NewStyleDialog.OnLeftClickListener {
-                                override fun leftClick() {
-                                    disMissDialog()
-                                }
-                            }, object : NewStyleDialog.OnRightClickListener {
-                                override fun rightClick() {
-                                    disMissDialog()
-                                    downLoadApk(versionBean.content_url)
-                                }
-                            })
-                        }
-                    }
-                    if (!TextUtils.isEmpty(versionBean.mainImg)) {
-                        Glide.with(this@MainActivity).load(versionBean.mainImg).into(show)
-                        CacheUtil.putString("mainImg", versionBean.mainImg)
-                    }
+                    doVersionResult(versionBean)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -147,6 +99,35 @@ class MainActivity : BaseActivity() {
 
             }
         })
+    }
+
+    private fun doVersionResult(versionBean: VersionBean) {
+        if (DeviceUtil.getAppVersionName().equals(versionBean.release)) {
+            Toast.makeText(this@MainActivity, "当前已是最新版本", Toast.LENGTH_SHORT).show()
+        } else {
+            if ("1" == versionBean.isUpdate) {
+                createDialog("版本更新", versionBean.content, "更新", object : NewStyleDialog.OnRightClickListener {
+                    override fun rightClick() {
+                        downLoadApk(versionBean.content_url)
+                    }
+                })
+            } else {
+                createDialog("版本更新", versionBean.content, "取消", "更新", object : NewStyleDialog.OnLeftClickListener {
+                    override fun leftClick() {
+                        disMissDialog()
+                    }
+                }, object : NewStyleDialog.OnRightClickListener {
+                    override fun rightClick() {
+                        disMissDialog()
+                        downLoadApk(versionBean.content_url)
+                    }
+                })
+            }
+        }
+        if (!TextUtils.isEmpty(versionBean.mainImg)) {
+            Glide.with(this@MainActivity).load(versionBean.mainImg).into(show)
+            CacheUtil.putString("mainImg", versionBean.mainImg)
+        }
     }
 
     //context.getExternalFilesDir()
@@ -351,51 +332,9 @@ class MainActivity : BaseActivity() {
         return try {
             startActivity(intent)
             true
-        } catch (e: java.lang.Exception) {
+        } catch (e: Exception) {
             // 未安装手Q或安装的版本不支持
             false
-        }
-    }
-
-    inner class NotificationUpdateReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            Log.i("====", "NotificationUpdateReceiver")
-            UpdateTask.widgetUpdateDataUtil.updateWidget("ck")
-        }
-    }
-
-    inner class NotificationUpdateReceiver1 : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            Log.i("====", "NotificationUpdateReceiver1")
-            UpdateTask.widgetUpdateDataUtil1.updateWidget("ck1")
-        }
-    }
-
-    inner class NotificationUpdateReceiver2 : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            Log.i("====", "NotificationUpdateReceiver2")
-            UpdateTask.widgetUpdateDataUtil2.updateWidget("ck2")
-        }
-    }
-
-    inner class NotificationUpdateReceiver3 : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            Log.i("====", "NotificationUpdateReceiver3")
-            UpdateTask.widgetUpdateDataUtil3.updateWidget("ck3")
-        }
-    }
-
-    inner class NotificationUpdateReceiver4 : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            Log.i("====", "NotificationUpdateReceiver4")
-            UpdateTask.widgetUpdateDataUtil4.updateWidget("ck4")
-        }
-    }
-
-    inner class NotificationUpdateReceiver5 : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            Log.i("====", "NotificationUpdateReceiver5")
-            UpdateTask.widgetUpdateDataUtil5.updateWidget("ck5")
         }
     }
 }

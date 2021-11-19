@@ -5,9 +5,6 @@ import com.wj.jd.R
 import kotlinx.android.synthetic.main.activity_about.*
 import android.content.Intent
 
-
-
-
 class AboutActivity : BaseActivity() {
 
     override fun setLayoutId(): Int {

@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.gyf.immersionbar.ktx.immersionBar
 import com.wj.jd.dialog.NewStyleDialog
+import com.wj.jd.util.ActivityCollector.addActivity
+import com.wj.jd.util.ActivityCollector.removeActivity
 
 /**
  * Created by Administrator on 2018/1/4.
@@ -21,6 +23,7 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(setLayoutId())
+        addActivity(this)
         barView = findViewById(R.id.barView)
         titleTv = findViewById(R.id.title)
         rightTitleTv = findViewById(R.id.rightTitle)
@@ -113,6 +116,11 @@ abstract class BaseActivity : AppCompatActivity() {
             dialog!!.dismiss()
             dialog = null
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        removeActivity(this)
     }
 
 }

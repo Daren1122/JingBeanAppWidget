@@ -1,5 +1,7 @@
 package com.wj.jd.bean
 
+import java.math.BigDecimal
+
 class UserBean {
     var nickName = ""
     var headImageUrl = ""
@@ -13,8 +15,8 @@ class UserBean {
     var ago4Bean = 0
 
     var hb = "--"
-    var gqhb = "--"
     var jxiang = "--"
+    var gqhb = "--"
     var countdownTime = 0
 
     var isPlusVip = "0"
@@ -22,4 +24,12 @@ class UserBean {
     var updateTips = ""
 
     var page = 1
+
+    var jxRed = BigDecimal(0)
+    var jdRed = BigDecimal(0)
+    var jsRed = BigDecimal(0)
+
+    var jxRedGQ = BigDecimal(0)
+    var jdRedGQ = BigDecimal(0)
+    var jsRedGQ = BigDecimal(0)
 }

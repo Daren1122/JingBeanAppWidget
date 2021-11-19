@@ -18,6 +18,6 @@ class MyApplication : Application() {
         super.onCreate()
         mInstance = this
 
-        CrashReport.initCrashReport(this, "a8f5ee2093", Constants.isDebug)
+        CrashReport.initCrashReport(this, "26e85b4a9d", Constants.isDebug)
     }
 }

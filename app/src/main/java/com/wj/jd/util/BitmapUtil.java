@@ -108,7 +108,7 @@ public class BitmapUtil {
     }
 
     public static Bitmap bimapRound(Bitmap mBitmap, float index) {
-        Bitmap bitmap = Bitmap.createBitmap(mBitmap.getWidth(), mBitmap.getHeight(), Bitmap.Config.ARGB_4444);
+        Bitmap bitmap = Bitmap.createBitmap(mBitmap.getWidth(), mBitmap.getHeight(), Bitmap.Config.ARGB_8888);
 
         Canvas canvas = new Canvas(bitmap);
         Paint paint = new Paint();

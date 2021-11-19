@@ -31,6 +31,11 @@ import android.graphics.Color
 import com.wj.jd.R
 import java.util.HashMap
 import kotlin.math.max
+import com.bumptech.glide.request.RequestOptions
+import com.wj.jd.EmptyActivity
+import java.math.BigDecimal
+import java.text.DecimalFormat
+
 
 /**
  * author wangjing
@@ -68,10 +73,10 @@ class WidgetUpdateDataUtil {
         todayTime = TimeUtil.getTodayMillis(0)
         ago4Time = TimeUtil.getTodayMillis(-4)
 
-        key1Ago = TimeUtil.getYesterDay(-1) + thisKey
-        key2Ago = TimeUtil.getYesterDay(-2) + thisKey
-        key3Ago = TimeUtil.getYesterDay(-3) + thisKey
-        key4Ago = TimeUtil.getYesterDay(-4) + thisKey
+        key1Ago = TimeUtil.getYesterDay(-1) + CacheUtil.getCKPtPin(thisKey)
+        key2Ago = TimeUtil.getYesterDay(-2) + CacheUtil.getCKPtPin(thisKey)
+        key3Ago = TimeUtil.getYesterDay(-3) + CacheUtil.getCKPtPin(thisKey)
+        key4Ago = TimeUtil.getYesterDay(-4) + CacheUtil.getCKPtPin(thisKey)
 
         keyList.clear()
 
@@ -95,7 +100,7 @@ class WidgetUpdateDataUtil {
             getJingBeanData(false)
         } else {
             Log.i("====", "有前几天缓存数据")
-            getJingBeanData(false)
+            getJingBeanData(true)
         }
 
         getRedPackge()
@@ -126,11 +131,47 @@ class WidgetUpdateDataUtil {
     private fun getRedPackge() {
         HttpUtil.getRedPack(thisKey, "https://m.jingxi.com/user/info/QueryUserRedEnvelopesV2?type=1&orgFlag=JD_PinGou_New&page=1&cashRedType=1&redBalanceFlag=1&channel=1&_=" + System.currentTimeMillis() + "&sceneval=2&g_login_type=1&g_ty=ls", object : StringCallBack {
             override fun onSuccess(result: String) {
+
                 try {
+                    userBean.jxRed = BigDecimal.ZERO
+                    userBean.jdRed = BigDecimal.ZERO
+                    userBean.jsRed = BigDecimal.ZERO
+                    userBean.jxRedGQ = BigDecimal.ZERO
+                    userBean.jsRedGQ = BigDecimal.ZERO
+                    userBean.jdRedGQ = BigDecimal.ZERO
                     val redPacket = gson.fromJson(result, RedPacket::class.java)
                     userBean.hb = redPacket.data.balance
                     userBean.gqhb = redPacket.data.expiredBalance
                     userBean.countdownTime = redPacket.data.countdownTime / 60 / 60
+                    val redList = redPacket.data.useRedInfo.redList
+                    if (redList != null && redList.size > 0) {
+                        val tomorrow = TimeUtil.getTodayMillis(1) / 1000
+                        for (red in redList) {
+                            when {
+                                red.orgLimitStr.contains("京喜") -> {
+                                    userBean.jxRed = userBean.jxRed.add(red.balance)
+                                    if (red.endTime < tomorrow) {
+                                        userBean.jxRedGQ = userBean.jxRedGQ.add(red.balance)
+                                    }
+                                }
+                                red.orgLimitStr.contains("极速版") -> {
+                                    userBean.jsRed = userBean.jsRed.add(red.balance)
+                                    if (red.endTime < tomorrow) {
+                                        userBean.jsRedGQ = userBean.jsRedGQ.add(red.balance)
+                                    }
+                                }
+                                red.orgLimitStr.contains("京东健康") -> {
+
+                                }
+                                else -> {
+                                    userBean.jdRed = userBean.jdRed.add(red.balance)
+                                    if (red.endTime < tomorrow) {
+                                        userBean.jdRedGQ = userBean.jdRedGQ.add(red.balance)
+                                    }
+                                }
+                            }
+                        }
+                    }
                     setData()
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -198,8 +239,9 @@ class WidgetUpdateDataUtil {
         Log.i("====page", userBean.page.toString())
         HttpUtil.getJD(thisKey, userBean.page, object : StringCallBack {
             override fun onSuccess(result: String) {
-                Log.i("====", result)
+                Log.i("====", "数据:$result")
                 try {
+                    if (TextUtils.isEmpty(result)) return
                     val jingDouBean = gson.fromJson(result, JingDouBean::class.java)
                     val dataList = jingDouBean.detailList
 
@@ -207,7 +249,7 @@ class WidgetUpdateDataUtil {
                     for (i in dataList.indices) {
                         val detail = dataList[i]
                         val beanDay = parseTime(detail.date)!!
-                        val dayName = detail.date.split(" ")[0] + thisKey
+                        val dayName = detail.date.split(" ")[0] + CacheUtil.getCKPtPin(thisKey)
                         if (keyList[dayName] == null) {
                             if (detail.amount > 0 && !detail.eventMassage.contains("退还")) {
                                 keyList[dayName] = detail.amount
@@ -224,6 +266,10 @@ class WidgetUpdateDataUtil {
                         } else {
                             beanDay < ago4Time
                         }
+                    }
+
+                    if (dataList.size == 0) {
+                        isFinish = true
                     }
 
                     if (isFinish) {
@@ -255,7 +301,12 @@ class WidgetUpdateDataUtil {
                             }
                         }
 
-                        userBean.todayBean = keyList[TimeUtil.getYesterDay(0) + thisKey]!!
+
+                        if (keyList[TimeUtil.getYesterDay(0) + CacheUtil.getCKPtPin(thisKey)] == null) {
+                            userBean.todayBean = 0
+                        } else {
+                            userBean.todayBean = keyList[TimeUtil.getYesterDay(0) + CacheUtil.getCKPtPin(thisKey)]!!
+                        }
                         userBean.ago1Bean = CacheUtil.getString(key1Ago)!!.toInt()
                         userBean.ago2Bean = CacheUtil.getString(key2Ago)!!.toInt()
                         userBean.ago3Bean = CacheUtil.getString(key3Ago)!!.toInt()
@@ -276,6 +327,9 @@ class WidgetUpdateDataUtil {
     }
 
     private fun setData() {
+        remoteViews.setViewVisibility(R.id.botParent, View.GONE)
+
+
         if ("1" == CacheUtil.getString("hideTips")) {
             remoteViews.setViewVisibility(R.id.botParent, View.GONE)
         } else {
@@ -314,12 +368,33 @@ class WidgetUpdateDataUtil {
             remoteViews.setViewPadding(R.id.rootParent, R.dimen.dp_20.dmToPx(), 0, R.dimen.dp_20.dmToPx(), 0)
         }
 
-        var designColor = CacheUtil.getString("designColor")
-        if (TextUtils.isEmpty(designColor)) {
-            designColor = "#FFFFFF"
+        //used: 16663552, max: 15163200
+        val cacheBac1 = CacheUtil.getString(thisKey + "_back")
+        if (TextUtils.isEmpty(cacheBac1)) {
+            var designColor = CacheUtil.getString("designColor")
+            if (TextUtils.isEmpty(designColor)) {
+                designColor = "#FFFFFF"
+            }
+            val bac = BitmapUtil.getColorBitmap(designColor)
+            remoteViews.setImageViewBitmap(R.id.background, BitmapUtil.bimapRound(bac, 20f))
+        } else {
+            val options = RequestOptions()
+                .override(400, 200)
+            Glide.with(MyApplication.mInstance)
+                .load(cacheBac1)
+                .apply(options)
+                .into(object : SimpleTarget<Drawable?>() {
+                    override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable?>?) {
+                        val bac = BitmapUtil.drawableToBitmap(resource)
+                        Log.i("====byteCount", bac.byteCount.toString())
+                        remoteViews.setImageViewBitmap(R.id.background, BitmapUtil.bimapRound(bac, 20f))
+                    }
+
+                    override fun onLoadFailed(errorDrawable: Drawable?) {
+                    }
+                })
         }
-        val bac = BitmapUtil.getColorBitmap(designColor)
-        remoteViews.setImageViewBitmap(R.id.background, BitmapUtil.bimapRound(bac, 20f))
+
 
         val colorSwitch = CacheUtil.getString("colorSwitch")
         if ("1" == colorSwitch) {
@@ -331,10 +406,23 @@ class WidgetUpdateDataUtil {
             remoteViews.setTextColor(R.id.todayTip, ColorUtil.transColor("#333333"))
             remoteViews.setTextColor(R.id.oneAgoBeanNum, ColorUtil.transColor("#FF000000"))
             remoteViews.setTextColor(R.id.todayBeanNum, ColorUtil.transColor("#FF000000"))
-            remoteViews.setTextColor(R.id.title, ColorUtil.transColor("#FF000000"))
-            remoteViews.setTextColor(R.id.guoquHb, ColorUtil.transColor("#333333"))
-            remoteViews.setTextColor(R.id.hongbao, ColorUtil.transColor("#FF0000"))
-            remoteViews.setTextColor(R.id.hongbao, ColorUtil.transColor("#FF0000"))
+
+            remoteViews.setTextColor(R.id.title1, ColorUtil.transColor("#FF000000"))
+            remoteViews.setTextColor(R.id.guoquHb1, ColorUtil.transColor("#333333"))
+            remoteViews.setTextColor(R.id.hongbao1, ColorUtil.transColor("#FF0000"))
+
+            remoteViews.setTextColor(R.id.title2, ColorUtil.transColor("#FF000000"))
+            remoteViews.setTextColor(R.id.guoquHb2, ColorUtil.transColor("#333333"))
+            remoteViews.setTextColor(R.id.hongbao2, ColorUtil.transColor("#FF0000"))
+
+            remoteViews.setTextColor(R.id.title3, ColorUtil.transColor("#FF000000"))
+            remoteViews.setTextColor(R.id.guoquHb3, ColorUtil.transColor("#333333"))
+            remoteViews.setTextColor(R.id.hongbao3, ColorUtil.transColor("#FF0000"))
+
+            remoteViews.setTextColor(R.id.title4, ColorUtil.transColor("#FF000000"))
+            remoteViews.setTextColor(R.id.guoquHb4, ColorUtil.transColor("#333333"))
+            remoteViews.setTextColor(R.id.hongbao4, ColorUtil.transColor("#FF0000"))
+
             remoteViews.setTextColor(R.id.tips, ColorUtil.transColor("#333333"))
             remoteViews.setTextColor(R.id.updateTime, ColorUtil.transColor("#333333"))
 
@@ -357,10 +445,23 @@ class WidgetUpdateDataUtil {
             remoteViews.setTextColor(R.id.todayTip, Color.parseColor("#333333"))
             remoteViews.setTextColor(R.id.oneAgoBeanNum, Color.parseColor("#FF000000"))
             remoteViews.setTextColor(R.id.todayBeanNum, Color.parseColor("#FF000000"))
-            remoteViews.setTextColor(R.id.title, Color.parseColor("#FF000000"))
-            remoteViews.setTextColor(R.id.guoquHb, Color.parseColor("#333333"))
-            remoteViews.setTextColor(R.id.hongbao, Color.parseColor("#FF0000"))
-            remoteViews.setTextColor(R.id.hongbao, Color.parseColor("#FF0000"))
+
+            remoteViews.setTextColor(R.id.title1, Color.parseColor("#FF000000"))
+            remoteViews.setTextColor(R.id.guoquHb1, Color.parseColor("#333333"))
+            remoteViews.setTextColor(R.id.hongbao1, Color.parseColor("#FF0000"))
+
+            remoteViews.setTextColor(R.id.title2, Color.parseColor("#FF000000"))
+            remoteViews.setTextColor(R.id.guoquHb2, Color.parseColor("#333333"))
+            remoteViews.setTextColor(R.id.hongbao2, Color.parseColor("#FF0000"))
+
+            remoteViews.setTextColor(R.id.title3, Color.parseColor("#FF000000"))
+            remoteViews.setTextColor(R.id.guoquHb3, Color.parseColor("#333333"))
+            remoteViews.setTextColor(R.id.hongbao3, Color.parseColor("#FF0000"))
+
+            remoteViews.setTextColor(R.id.title4, Color.parseColor("#FF000000"))
+            remoteViews.setTextColor(R.id.guoquHb4, Color.parseColor("#333333"))
+            remoteViews.setTextColor(R.id.hongbao4, Color.parseColor("#FF0000"))
+
             remoteViews.setTextColor(R.id.tips, Color.parseColor("#333333"))
             remoteViews.setTextColor(R.id.updateTime, Color.parseColor("#333333"))
 
@@ -383,16 +484,56 @@ class WidgetUpdateDataUtil {
             remoteViews.setViewVisibility(R.id.divider, View.VISIBLE)
         }
 
+
+        val code = when (thisKey) {
+            "ck" -> {
+                0
+            }
+            "ck1" -> {
+                1
+            }
+            "ck2" -> {
+                2
+            }
+            "ck3" -> {
+                3
+            }
+            "ck4" -> {
+                4
+            }
+            "ck5" -> {
+                5
+            }
+            else -> {
+                -1
+            }
+        }
+
+        val cleatInt = Intent(MyApplication.mInstance, EmptyActivity::class.java)
+        cleatInt.putExtra("data", thisKey)
+        cleatInt.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        val clearIntent = PendingIntent.getActivity(MyApplication.mInstance, code, cleatInt, PendingIntent.FLAG_UPDATE_CURRENT)
+        remoteViews.setOnClickPendingIntent(R.id.headImg, clearIntent)
+
         val cleatInt2 = Intent(MyApplication.mInstance, MainActivity::class.java)
         cleatInt2.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        val clearIntent2 = PendingIntent.getActivity(MyApplication.mInstance, 3, cleatInt2, PendingIntent.FLAG_UPDATE_CURRENT)
+        val clearIntent2 = PendingIntent.getActivity(MyApplication.mInstance, 10, cleatInt2, PendingIntent.FLAG_UPDATE_CURRENT)
         remoteViews.setOnClickPendingIntent(R.id.rightContent, clearIntent2)
 
         remoteViews.setTextViewText(R.id.beanNum, userBean.beanNum)
         remoteViews.setTextViewText(R.id.todayBean, "+" + userBean.todayBean)
         remoteViews.setTextViewText(R.id.updateTime, "数据更新于:" + getCurrentData())
-        remoteViews.setTextViewText(R.id.hongbao, userBean.hb)
 
+        remoteViews.setTextViewText(R.id.hongbao1, userBean.hb)
+
+        val df = DecimalFormat("####.00")
+        remoteViews.setTextViewText(R.id.hongbao2, String.format("%.2f", userBean.jxRed))
+        remoteViews.setTextViewText(R.id.hongbao3, String.format("%.2f", userBean.jdRed))
+        remoteViews.setTextViewText(R.id.hongbao4, String.format("%.2f", userBean.jsRed))
+
+        remoteViews.setTextViewText(R.id.guoquHb2, "今日过期:" + String.format("%.2f", userBean.jxRedGQ))
+        remoteViews.setTextViewText(R.id.guoquHb3, "今日过期:" + String.format("%.2f", userBean.jdRedGQ))
+        remoteViews.setTextViewText(R.id.guoquHb4, "今日过期:" + String.format("%.2f", userBean.jsRedGQ))
         val showType = CacheUtil.getString("douShowType")
         Log.i("====showType", showType.toString())
         if (TextUtils.isEmpty(showType) || "文字展示" == showType) {
@@ -444,43 +585,16 @@ class WidgetUpdateDataUtil {
 
         try {
             if (getCurrentHH() + userBean.countdownTime > 24) {
-                remoteViews.setTextViewText(R.id.guoquHb, "明日过期:" + userBean.gqhb)
+                remoteViews.setTextViewText(R.id.guoquHb1, "明日过期:" + userBean.gqhb)
             } else {
-                remoteViews.setTextViewText(R.id.guoquHb, "今日过期:" + userBean.gqhb)
+                remoteViews.setTextViewText(R.id.guoquHb1, "今日过期:" + userBean.gqhb)
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            remoteViews.setTextViewText(R.id.guoquHb, "今日过期:" + userBean.gqhb)
+            remoteViews.setTextViewText(R.id.guoquHb1, "今日过期:" + userBean.gqhb)
         }
         remoteViews.setTextViewText(R.id.jingXiang, userBean.jxiang)
 
-        val cleatIntent = Intent()
-        cleatIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        cleatIntent.action = when (thisKey) {
-            "ck" -> {
-                "com.scott.sayhi"
-            }
-            "ck1" -> {
-                "com.scott.sayhi1"
-            }
-            "ck2" -> {
-                "com.scott.sayhi2"
-            }
-            "ck3" -> {
-                "com.scott.sayhi3"
-            }
-            "ck4" -> {
-                "com.scott.sayhi4"
-            }
-            "ck5" -> {
-                "com.scott.sayhi5"
-            }
-            else -> {
-                ""
-            }
-        }
-        val clearIntent3 = PendingIntent.getBroadcast(MyApplication.mInstance, 0, cleatIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-        remoteViews.setOnClickPendingIntent(R.id.headImg, clearIntent3)
 
         if (TextUtils.isEmpty(userBean.headImageUrl)) {
             Glide.with(MyApplication.mInstance)
